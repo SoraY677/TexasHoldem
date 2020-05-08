@@ -21,7 +21,7 @@ class TrumpBunch {
        var cardIdList:ArrayList<String> = arrayListOf()
        for(cardi in 0 until CARD_NUM_MAX)
       {
-          cardIdList.add(String.format("%d",(cardi / 13 + 1)) + String.format("%d",(cardi % 13 + 1)) )
+          cardIdList.add("c" + String.format("%d",(cardi / 13 + 1)) + String.format("%02d",(cardi % 13 + 1)) )
       }
         return cardIdList
     }
