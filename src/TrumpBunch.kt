@@ -5,8 +5,8 @@ class TrumpBunch {
     var cardList:ArrayList<TrumpCard> = arrayListOf()
 
     //全てのトランプの合計数
-    // ♠・♥・♣・♦の各1-13 + ババ　2枚
-    val CARD_NUM_MAX = 54
+    // ♠・♥・♣・♦の各1-13 + ババ　1枚
+    val CARD_NUM_MAX = 53
 
 
     fun Init(){
@@ -15,6 +15,17 @@ class TrumpBunch {
             cardList.add(TrumpCard(cardi % 13 + 1,cardi / 13))
         }
     }
+
+
+    fun issueCardIdList():ArrayList<String>{
+       var cardIdList:ArrayList<String> = arrayListOf()
+       for(cardi in 0 until CARD_NUM_MAX)
+      {
+          cardIdList.add(String.format("%d",(cardi / 13 + 1)) + String.format("%d",(cardi % 13 + 1)) )
+      }
+        return cardIdList
+    }
+
 
     //カードをシャッフル
     fun shuffle(){
