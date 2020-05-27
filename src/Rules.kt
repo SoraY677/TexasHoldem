@@ -44,7 +44,7 @@ class Rules {
         println(numListSortedByCardNum)
         println(markListSortedByCardMark)
 
-        println(judgeFlush(markListSortedByCardMark))
+        println(judgeStrait(numListSortedByCardNum))
 
         return mutableMapOf()
 
@@ -81,8 +81,26 @@ class Rules {
     /**
      * ストレート
      */
-    fun judgeStrait(){
+    fun judgeStrait(sortedNumList:MutableList<Int>):Boolean{
 
+        var cardNumDiff = 0
+        var prevNum = 0
+        var targetCount = 0
+        sortedNumList.forEach{
+            cardNumDiff= it - prevNum
+            //差が1の時、階段状なのでカウントする
+            if(cardNumDiff == 1)targetCount++
+            else {
+                targetCount = 1
+            }
+
+            if(targetCount == 5){
+                return true
+            }
+
+            prevNum = it //更新
+        }
+        return false
     }
 
     /**
