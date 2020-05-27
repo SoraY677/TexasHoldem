@@ -5,27 +5,19 @@ class TrumpBunch {
     var cardList:ArrayList<TrumpCard> = arrayListOf()
 
     //全てのトランプの合計数
-    // ♠・♥・♣・♦の各1-13 + ババ　1枚
-    val CARD_NUM_MAX = 53
+    //マーク・数の最大
+    val MARK_MAX = 4
+    val NUM_MAX = 13
+    // ♠・♥・♣・♦の各1-13
+    val CARD_NUM_MAX = MARK_MAX * NUM_MAX
 
 
-    fun Init(){
+    constructor(){
         // 山札の各カードを生成
         for(cardi in 0 until CARD_NUM_MAX) {
-            cardList.add(TrumpCard(cardi % 13 + 1,cardi / 13))
+            cardList.add(TrumpCard(cardi % NUM_MAX + 1,cardi / NUM_MAX))
         }
     }
-
-
-    fun issueCardIdList():ArrayList<String>{
-       var cardIdList:ArrayList<String> = arrayListOf()
-       for(cardi in 0 until CARD_NUM_MAX)
-      {
-          cardIdList.add("c" + String.format("%d",(cardi / 13 + 1)) + String.format("%02d",(cardi % 13 + 1)) )
-      }
-        return cardIdList
-    }
-
 
     //カードをシャッフル
     fun shuffle(){
@@ -40,6 +32,17 @@ class TrumpBunch {
 
         cardList  = cardListTmp
     }
+
+
+    fun issueCardIdList():ArrayList<String>{
+       var cardIdList:ArrayList<String> = arrayListOf()
+       for(cardi in 0 until CARD_NUM_MAX)
+      {
+          cardIdList.add("c" + String.format("%d",(cardi / 13 + 1)) + String.format("%02d",(cardi % 13 + 1)) )
+      }
+        return cardIdList
+    }
+
 
     // カードリストの一番上からカードをひく
     fun drawCardfromTop():TrumpCard{

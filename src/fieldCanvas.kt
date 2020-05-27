@@ -7,14 +7,11 @@ import javax.swing.ImageIcon
 
 
 
-class fieldCanvas : Canvas(){
+class FieldCanvas : Canvas(){
 
     var imageList:MutableMap<String,Image> = mutableMapOf()
 
     var paintImgMapReciever:ArrayList<Map<String,Any>> = arrayListOf()
-
-//    TODO:状態遷移のクラスを実装する
-//    val stateController =
 
     init {
         //トランプ画像
@@ -26,7 +23,6 @@ class fieldCanvas : Canvas(){
         imageList["c999"] = ImageIcon(javaClass.getResource("image/card/c999.png")).image
 
     }
-
 
     override fun paint(g: Graphics) {
         for(pathel in paintImgMapReciever) {
