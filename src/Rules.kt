@@ -30,52 +30,79 @@ class Rules {
 
         //配列を結合する
         val origin7Card = handCard.plus(flopCard)
+        var trumpCardList = arrayListOf<TrumpCard>()
         var numListSortedByCardNum = mutableListOf<Int>()
         var markListSortedByCardMark = mutableListOf<Int>()
         origin7Card.forEach{
-            numListSortedByCardNum.add(it.num)
+            // AはKよりも高いので、14扱いにします
+            var numtmp = it.num
+            if(numtmp == 1) numtmp = 14
+
+            trumpCardList.add(TrumpCard(numtmp,it.mark))
+            numListSortedByCardNum.add(numtmp)
             markListSortedByCardMark.add(it.mark)
+
         }
+
+        //それぞれの配列を昇順にソート
         numListSortedByCardNum = ArrayList(numListSortedByCardNum)
         markListSortedByCardMark = ArrayList(markListSortedByCardMark)
         numListSortedByCardNum.sortBy{ it }
         markListSortedByCardMark.sortBy{ it }
 
-        println(numListSortedByCardNum)
-        println(markListSortedByCardMark)
 
-        println(judgeStrait(numListSortedByCardNum))
+        var test = judgeStraitFlush(trumpCardList)
+
+        val sortedTrumpList = sortTrumpCardList(trumpCardList)
+        sortedTrumpList.forEach {
+            println(it.num)
+            println(it.mark)
+        }
+        println(sortTrumpCardList(trumpCardList))
 
         return mutableMapOf()
 
     }
 
-    /**
-     * ノーペア探索
-     */
-    fun judgeNoPair(cardList:ArrayList<TrumpCard>){
-
-    }
 
     /**
-     * ワンペア
+     * ペア・ツーペア・スリーカード・フォーカード・ノーペアのハンドを探索する
+     * @return ワンペア存在：ワンペアのあったindex+1 / ワンペア不在：-1
      */
-    fun judgeOnePair(){
+    fun judgeHandOverPair(sortedNumList:MutableList<Int>):Int{
+        var NumCount = mutableListOf<Int>(0,0,0) //各組の数
+        var prevNum = 0 // ひとつ前の探索対象
+        var prevprevNum = -1 //ふたつ前の探索対象
+        var countIndex = 0 //組配列のindex
+        for( cardi in 0 until sortedNumList.size) {
+            //ひとつ前の探索対象 = 今の探索対象
+            if(prevNum == sortedNumList[cardi]){
+                NumCount[countIndex]++
+                prevprevNum = prevNum
+            }
+            else{
+                // ひとつ前まで同じ数が連続していたら切り替え
+                if(prevprevNum == prevNum) countIndex++
+            }
+            prevNum = sortedNumList[cardi]
+        }
 
-    }
 
-    /**
-     *  ツーペア
-     */
-    fun judgeTwoPair(){
+        NumCount.sortBy { it * -1}//降順にソート
 
-    }
+        // フォーカード
+        if(NumCount[0] == 3) return FOR_OF_A_KIND
+        // スリーカード or フルハウス
+        else if(NumCount[0] == 2){
+            if(NumCount[1] == 1) return FULL_HOUSE
+            else return THREE_OF_A_KIND
+        }
+        else if(NumCount[0] == 1){
+            if(NumCount[1] == 1)return TWO_PAIR
+            return ONE_PAIR
+        }
 
-    /**
-     * スリーカード
-     */
-    fun judgeThreeOfaKind(){
-
+        return NO_PAIR
     }
 
     /**
@@ -127,7 +154,7 @@ class Rules {
             numerousMarkCount = max(targetCount,numerousMarkCount)
             prevMark = it // 次へ切り替え
         }
-        //一番登場したマークが5枚以上ならばフラッシュ！！！
+        //一番登場したマークが5枚以上ならばフラッシュ
         if(numerousMarkCount >= 5){
             return true;
         }
@@ -135,26 +162,82 @@ class Rules {
         return false
     }
 
-    /**
-     * フルハウス
-     */
-    fun judgeFullHouse(){
-
-    }
-
-    /**
-     * フォーカード
-     */
-    fun judgeFourOfaKind(){
-
-    }
 
     /**
      * ストレートフラッシュ
+     * @return ストレートフラッシュ？ : true/false
      */
-    fun judgeStraitFlush(){
-
+    fun judgeStraitFlush(trumpList:ArrayList<TrumpCard>):Boolean{
+        var trumpListtmp = trumpList
+        trumpListtmp.sortedBy { it.num * -1 }
+        trumpListtmp.forEach {
+            print(it.num)
+            println(" " + it.mark)
+        }
+        return false
     }
+
+    /**
+     * トランプカードを昇順にクイックソート
+     * 参考【http://www.ics.kagoshima-u.ac.jp/~fuchida/edu/algorithm/sort-algorithm/quick-sort.html】
+     */
+    fun sortTrumpCardList(trumpList:ArrayList<TrumpCard>,lefti:Int = 0,righti:Int = (trumpList.size-1)) : ArrayList<TrumpCard>{
+
+        var sortTrumpList = trumpList
+        //探索終了時には受け取ったtrumpListと同じものを返す
+        if(lefti == righti)return trumpList
+        //順に見て、異なる値を２つ見つけ,、大きいほうを探索の対象とする
+        var pivot = fun():Int {
+
+            for (i in lefti+1 until righti){
+                if(sortTrumpList[lefti].num != sortTrumpList[i].num){
+                    return max(sortTrumpList[lefti].num,sortTrumpList[i].num)
+                }
+            }
+            //異なる値が見つからない場合は -1
+            return -1
+        }
+
+        // pivotで求めた探索対象をもとにして分割
+        // 左から求めた大きいほうの開始番号を返却
+        var partition = fun():Int{
+            var li = lefti
+            var ri = righti
+            val targetNumIndex = pivot()
+            //探索が交差するまで繰り返す
+            while(li <= ri){
+
+                //左から右へ、探索対象以上の数値を探索
+                while(li < righti) {
+                    if (sortTrumpList[li].num >= targetNumIndex) break
+                    li++
+                }
+
+                //右から左へ、探索対象未満の数値を探索
+                while(ri > lefti){
+                    if(sortTrumpList[ri].num < targetNumIndex) break
+                    ri--
+                }
+
+                if(li>ri) break;
+                // 探索対象たちをswap
+                val swaptmp = sortTrumpList[li]
+                sortTrumpList[li] = sortTrumpList[ri]
+                sortTrumpList[ri] = swaptmp
+                li++
+                ri--
+            }
+            return li
+        }
+
+        val partitionIndex = partition()
+        sortTrumpList = sortTrumpCardList(sortTrumpList,lefti,partitionIndex-1)
+        sortTrumpList = sortTrumpCardList(sortTrumpList,partitionIndex,righti)
+
+        return sortTrumpList
+    }
+
+
 
 
 
