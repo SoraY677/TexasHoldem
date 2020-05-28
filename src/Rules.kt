@@ -53,12 +53,36 @@ class Rules {
 
         var test = judgeStraitFlush(trumpCardList)
 
-        val sortedTrumpList = sortTrumpCardList(trumpCardList)
+        var sortedTrumpList = sortTrumpCardList(trumpCardList,false)
+        var markNumList = arrayListOf(0,-1,-1,-1,-1)
+        var prevMark = -1
+
+        //各マークの登場するindexを算出
+        //登場しない場合は -1
         sortedTrumpList.forEach {
-            println(it.num)
+            //マークが切り替わったとき
+            if(prevMark != it.mark){
+                //これまでの登場マークすべてを加算し、マーク切り替えを登録
+                markNumList[it.mark + 1] = markNumList[it.mark]
+                prevMark = it.mark
+            }
+            markNumList[it.mark + 1]++
+        }
+
+
+        for(marki in 1 until markNumList.size) {
+            for(previ in 1..marki ){
+                if(markNumList[previ] != -1){
+                    sortedTrumpList = sortTrumpCardList(sortedTrumpList,true,markNumList[marki-previ],markNumList[marki]-1)
+                    break
+                }
+            }
+        }
+
+        sortedTrumpList.forEach {
+            print(it.num)
             println(it.mark)
         }
-        println(sortTrumpCardList(trumpCardList))
 
         return mutableMapOf()
 
@@ -181,17 +205,28 @@ class Rules {
      * トランプカードを昇順にクイックソート
      * 参考【http://www.ics.kagoshima-u.ac.jp/~fuchida/edu/algorithm/sort-algorithm/quick-sort.html】
      */
-    fun sortTrumpCardList(trumpList:ArrayList<TrumpCard>,lefti:Int = 0,righti:Int = (trumpList.size-1)) : ArrayList<TrumpCard>{
+    fun sortTrumpCardList(trumpList:ArrayList<TrumpCard>,isNumorMark:Boolean,lefti:Int = 0,righti:Int = (trumpList.size-1)) : ArrayList<TrumpCard>{
 
         var sortTrumpList = trumpList
+        var compTrumpList = arrayListOf<Int>()
+        if(isNumorMark) {
+            sortTrumpList.forEach {
+                compTrumpList.add(it.num)
+            }
+        }
+        else{
+            sortTrumpList.forEach {
+                compTrumpList.add(it.mark)
+            }
+        }
         //探索終了時には受け取ったtrumpListと同じものを返す
         if(lefti == righti)return trumpList
         //順に見て、異なる値を２つ見つけ,、大きいほうを探索の対象とする
         var pivot = fun():Int {
 
             for (i in lefti+1 until righti){
-                if(sortTrumpList[lefti].num != sortTrumpList[i].num){
-                    return max(sortTrumpList[lefti].num,sortTrumpList[i].num)
+                if(compTrumpList[lefti] != compTrumpList[i]){
+                    return max(compTrumpList[lefti],compTrumpList[i])
                 }
             }
             //異なる値が見つからない場合は -1
@@ -209,13 +244,13 @@ class Rules {
 
                 //左から右へ、探索対象以上の数値を探索
                 while(li < righti) {
-                    if (sortTrumpList[li].num >= targetNumIndex) break
+                    if (compTrumpList[li] >= targetNumIndex) break
                     li++
                 }
 
                 //右から左へ、探索対象未満の数値を探索
                 while(ri > lefti){
-                    if(sortTrumpList[ri].num < targetNumIndex) break
+                    if(compTrumpList[ri] < targetNumIndex) break
                     ri--
                 }
 
@@ -231,8 +266,8 @@ class Rules {
         }
 
         val partitionIndex = partition()
-        sortTrumpList = sortTrumpCardList(sortTrumpList,lefti,partitionIndex-1)
-        sortTrumpList = sortTrumpCardList(sortTrumpList,partitionIndex,righti)
+        sortTrumpList = sortTrumpCardList(sortTrumpList,isNumorMark,lefti,partitionIndex-1)
+        sortTrumpList = sortTrumpCardList(sortTrumpList,isNumorMark,partitionIndex,righti)
 
         return sortTrumpList
     }
