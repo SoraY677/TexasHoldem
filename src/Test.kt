@@ -14,7 +14,7 @@ class Test {
 
         val test = rules.searchHand(
             createTestCard2(arrayListOf(1,2), arrayListOf(0,0)),
-            createTestCard5(arrayListOf(2,2,2,4,5), arrayListOf(1,2,3,0,0))
+            createTestCard5(arrayListOf(3,4,5,6,7), arrayListOf(0,0,0,0,0))
         )
 
     }

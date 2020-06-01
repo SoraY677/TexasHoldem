@@ -9,7 +9,7 @@ class Rules {
 
     //役一覧リスト
     //↑強い
-    val ROYAL_FLASH = 9      // ロイヤルストレートフラッシュ / マーク統一で[10,J,Q,K,A]
+    val ROYAL_STRAIT_FLASH = 9      // ロイヤルストレートフラッシュ / マーク統一で[10,J,Q,K,A]
     val STRAIT_FLASH = 8     // ストレートフラッシュ / マーク統一で順番 (ex)♣6~10
     val FOR_OF_A_KIND = 7    // フォーカード　/数字4つ同じ  (ex)[♥7,♣7,♠7,♦7] + any
     val FULL_HOUSE = 6       // フルハウス / 数字3つ同じ＋残りもペア (ex)[♥7,♣7,♠7,♠3,♦3]
@@ -50,39 +50,7 @@ class Rules {
         numListSortedByCardNum.sortBy{ it }
         markListSortedByCardMark.sortBy{ it }
 
-
-        var test = judgeStraitFlush(trumpCardList)
-
-        var sortedTrumpList = sortTrumpCardList(trumpCardList,false)
-        var markNumList = arrayListOf(0,-1,-1,-1,-1)
-        var prevMark = -1
-
-        //各マークの登場するindexを算出
-        //登場しない場合は -1
-        sortedTrumpList.forEach {
-            //マークが切り替わったとき
-            if(prevMark != it.mark){
-                //これまでの登場マークすべてを加算し、マーク切り替えを登録
-                markNumList[it.mark + 1] = markNumList[it.mark]
-                prevMark = it.mark
-            }
-            markNumList[it.mark + 1]++
-        }
-
-
-        for(marki in 1 until markNumList.size) {
-            for(previ in 1..marki ){
-                if(markNumList[previ] != -1){
-                    sortedTrumpList = sortTrumpCardList(sortedTrumpList,true,markNumList[marki-previ],markNumList[marki]-1)
-                    break
-                }
-            }
-        }
-
-        sortedTrumpList.forEach {
-            print(it.num)
-            println(it.mark)
-        }
+        println(judgeStraitFlush(trumpCardList));
 
         return mutableMapOf()
 
@@ -186,19 +154,68 @@ class Rules {
         return false
     }
 
-
     /**
-     * ストレートフラッシュ
-     * @return ストレートフラッシュ？ : true/false
+     * ストレートフラッシュ/ロイヤルストレートフラッシュの判定
+     * @return
      */
-    fun judgeStraitFlush(trumpList:ArrayList<TrumpCard>):Boolean{
-        var trumpListtmp = trumpList
-        trumpListtmp.sortedBy { it.num * -1 }
-        trumpListtmp.forEach {
-            print(it.num)
-            println(" " + it.mark)
+    fun judgeStraitFlush(trumpList:ArrayList<TrumpCard>):Int{
+        var trumpCardList = trumpList
+
+        println("ここまで")
+        var sortedTrumpList = sortTrumpCardList(trumpCardList,false)
+        var markNumList = arrayListOf(0,-1,-1,-1,-1)
+        var prevMark = -1
+
+        //各マークの登場するindexを算出
+        //登場しない場合は -1
+        sortedTrumpList.forEach {
+            //マークが切り替わったとき
+            if(prevMark != it.mark){
+                //これまでの登場マークすべてを加算し、マーク切り替えを登録
+                markNumList[it.mark + 1] = markNumList[it.mark]
+                prevMark = it.mark
+            }
+            markNumList[it.mark + 1]++
         }
-        return false
+
+        println(markNumList)
+        //マークごとにおける数ソート
+        for(marki in 1 until markNumList.size) {
+            if(markNumList[marki] != -1){
+                    sortedTrumpList = sortTrumpCardList(sortedTrumpList,true,markNumList[marki-1],markNumList[marki]-1)
+                    break
+            }
+        }
+
+        /*ストレートフラッシュを探索*/
+        var markCount = 0
+        var isRoyal = false
+        var prevNum = 0;
+        prevMark = -1;
+        val royalArray = arrayOf(14,13,12,11,10)
+        //配列をreverseし、昇順にする
+        val reverseSortTrumpList = sortedTrumpList
+        reverseSortTrumpList.reverse()
+        reverseSortTrumpList.forEach {
+            print(it.num)
+            println(it.mark)
+            if(prevMark == it.mark && it.num - prevNum == 1){
+                markCount ++
+                if(royalArray[markCount - 1] == it.num)isRoyal = true
+                println("hogehoeg")
+            }
+            else{
+                markCount = 1;
+            }
+            if(markCount == 5){
+                if(isRoyal)return ROYAL_STRAIT_FLASH
+                else return STRAIT_FLASH
+            }
+            prevMark = it.mark
+            prevNum = it.num
+        }
+        //なければ-1
+        return -1
     }
 
     /**
@@ -222,7 +239,7 @@ class Rules {
         //探索終了時には受け取ったtrumpListと同じものを返す
         if(lefti == righti)return trumpList
         //順に見て、異なる値を２つ見つけ,、大きいほうを探索の対象とする
-        var pivot = fun():Int {
+        val pivot = fun():Int {
 
             for (i in lefti+1 until righti){
                 if(compTrumpList[lefti] != compTrumpList[i]){
@@ -230,12 +247,13 @@ class Rules {
                 }
             }
             //異なる値が見つからない場合は -1
-            return -1
+
+            return compTrumpList[lefti]
         }
 
         // pivotで求めた探索対象をもとにして分割
         // 左から求めた大きいほうの開始番号を返却
-        var partition = fun():Int{
+        val partition = fun():Int{
             var li = lefti
             var ri = righti
             val targetNumIndex = pivot()
@@ -254,7 +272,7 @@ class Rules {
                     ri--
                 }
 
-                if(li>ri) break;
+                if(li>ri) break
                 // 探索対象たちをswap
                 val swaptmp = sortTrumpList[li]
                 sortTrumpList[li] = sortTrumpList[ri]
