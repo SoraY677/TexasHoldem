@@ -1,3 +1,4 @@
+import java.lang.reflect.Field
 import kotlin.system.exitProcess
 
 class Test {
@@ -10,13 +11,15 @@ class Test {
 
     //テストモード中に実行する処理を記述
     fun process(){
-        val rules = Rules()
-
-        val test = rules.searchHand(
-            createTestCard2(arrayListOf(1,2), arrayListOf(0,0)),
-            createTestCard5(arrayListOf(3,4,5,6,7), arrayListOf(0,0,0,0,0))
-        )
-
+//        val rules = Rules()
+//
+//        val test = rules.searchHand(
+//            createTestCard2(arrayListOf(5,10), arrayListOf(0,0)),
+//            createTestCard5(arrayListOf(11,12,13,5,7), arrayListOf(0,0,0,0,0))
+//        )
+//
+//        println(test)
+        StateController()
     }
 
     fun createTestCard2(numberList: ArrayList<Int> = arrayListOf(1,2),markList: ArrayList<Int> = arrayListOf(0,0)):ArrayList<TrumpCard>{

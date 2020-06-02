@@ -1,4 +1,3 @@
-
 import kotlin.collections.ArrayList
 import kotlin.random.Random
 
@@ -43,11 +42,28 @@ class ProgressController {
      * user,com,flopそれぞれに
      * カードの配布を行う
      */
-    fun divideCards(){
+    fun divideCards():MutableMap<String,ArrayList<String>>{
         //user,com = 2 | flop = 3 でカードを配る
-        user.recieveCards(arrayListOf(trumpBunch.drawCardfromTop(),trumpBunch.drawCardfromTop()))
-        com.recieveCards(arrayListOf(trumpBunch.drawCardfromTop(),trumpBunch.drawCardfromTop()))
-        flop.recieveCards(arrayListOf(trumpBunch.drawCardfromTop(),trumpBunch.drawCardfromTop(),trumpBunch.drawCardfromTop()))
+        val userCard = arrayListOf(trumpBunch.drawCardfromTop(),trumpBunch.drawCardfromTop())
+        user.recieveCards(userCard)
+        val comCard = arrayListOf(trumpBunch.drawCardfromTop(),trumpBunch.drawCardfromTop())
+        com.recieveCards(comCard)
+        val flopCard = arrayListOf(trumpBunch.drawCardfromTop(),trumpBunch.drawCardfromTop(),trumpBunch.drawCardfromTop())
+        flop.recieveCards(flopCard)
+
+        //カード情報を返す
+        var result = mutableMapOf("user" to arrayListOf<String>(), "com" to arrayListOf<String>(),"flop" to arrayListOf<String>())
+        userCard.forEach {
+            result["user"]!!.add("c" + (it.mark+1).toString() + String.format("%02d",(it.num)))
+        }
+        comCard.forEach {
+            result["com"]!!.add("c" + (it.mark+1).toString() + String.format("%02d",(it.num)))
+        }
+        flopCard.forEach {
+            result["flop"]!!.add("c" + (it.mark+1).toString() + String.format("%02d",(it.num)))
+        }
+
+        return result
     }
 
 
@@ -59,18 +75,28 @@ class ProgressController {
     }
 
     /**
+     * ユーザの行動
+     */
+    fun actUserHand(){
+        user.actHand()
+    }
+
+
+    /**
+     * コンピュータの行動
+     */
+    fun actComHand(){
+        com.actHand(flop.cardList)
+    }
+
+
+    /**
      * ユーザ・コンピュータの役判定
      * @return judgeResult
      */
     fun judgeHandPower(){
 
     }
-
-
-
-
-
-
 
 
     /**

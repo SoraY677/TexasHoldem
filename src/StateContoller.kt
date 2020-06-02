@@ -1,5 +1,3 @@
-package image
-
 class StateContoller {
 
     var state = 0

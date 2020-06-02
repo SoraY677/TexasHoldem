@@ -1,5 +1,6 @@
 import com.sun.org.apache.xpath.internal.operations.Bool
 import sun.security.ec.point.ProjectivePoint
+import java.io.Flushable
 import kotlin.math.max
 
 //役の参考サイト
@@ -26,7 +27,7 @@ class Rules {
      * @return {handPower:Number,highestNum:Number} 役の強さと手札のうち最も高いカードの数値
      *
      */
-    fun searchHand(handCard:ArrayList<TrumpCard>, flopCard:ArrayList<TrumpCard>):MutableMap<String,Number>{
+    fun searchHand(handCard:ArrayList<TrumpCard>, flopCard:ArrayList<TrumpCard>):Int{
 
         //配列を結合する
         val origin7Card = handCard.plus(flopCard)
@@ -50,9 +51,19 @@ class Rules {
         numListSortedByCardNum.sortBy{ it }
         markListSortedByCardMark.sortBy{ it }
 
-        println(judgeStraitFlush(trumpCardList));
+        var result = judgeHandOverPair(numListSortedByCardNum)
+        if(judgeStrait(numListSortedByCardNum)){
+            result = STRAIT
+        }
+        if(judgeFlush(markListSortedByCardMark)){
+            result = FLUSH
+        }
 
-        return mutableMapOf()
+        if(result == STRAIT || result == FLUSH){
+            result = max(result,judgeStraitFlush(trumpCardList))
+        }
+
+        return result
 
     }
 
@@ -161,7 +172,6 @@ class Rules {
     fun judgeStraitFlush(trumpList:ArrayList<TrumpCard>):Int{
         var trumpCardList = trumpList
 
-        println("ここまで")
         var sortedTrumpList = sortTrumpCardList(trumpCardList,false)
         var markNumList = arrayListOf(0,-1,-1,-1,-1)
         var prevMark = -1
@@ -178,7 +188,6 @@ class Rules {
             markNumList[it.mark + 1]++
         }
 
-        println(markNumList)
         //マークごとにおける数ソート
         for(marki in 1 until markNumList.size) {
             if(markNumList[marki] != -1){
@@ -197,12 +206,9 @@ class Rules {
         val reverseSortTrumpList = sortedTrumpList
         reverseSortTrumpList.reverse()
         reverseSortTrumpList.forEach {
-            print(it.num)
-            println(it.mark)
-            if(prevMark == it.mark && it.num - prevNum == 1){
+            if(prevMark == it.mark && prevNum - it.num == 1){
                 markCount ++
                 if(royalArray[markCount - 1] == it.num)isRoyal = true
-                println("hogehoeg")
             }
             else{
                 markCount = 1;
@@ -289,9 +295,5 @@ class Rules {
 
         return sortTrumpList
     }
-
-
-
-
 
 }

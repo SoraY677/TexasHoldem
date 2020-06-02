@@ -25,9 +25,10 @@ class FieldCanvas : Canvas(){
     }
 
     override fun paint(g: Graphics) {
-        for(pathel in paintImgMapReciever) {
-            g.drawImage(imageList[pathel["imgPath"]], 0, 0, null)
+        for(paintMap in paintImgMapReciever) {
+            g.drawImage(imageList[paintMap["img"]],paintMap["x"].toString().toInt() , paintMap["y"].toString().toInt(), null)
         }
+//        g.drawImage(imageList["c101"],0,0,null)
     }
 
     /**
@@ -35,6 +36,8 @@ class FieldCanvas : Canvas(){
      */
     fun repaintCanvas(imageMap:ArrayList<Map<String,Any>>){
         paintImgMapReciever = imageMap
+        //TODO: 配列で渡されたデータを描画する
+
 
         repaint()
     }
