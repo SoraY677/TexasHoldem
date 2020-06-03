@@ -34,8 +34,9 @@ class ProgressController {
      * ディーラーを交代する
      * 初回ディーラー決定時も生成時にランダムから決定しているので以下を実行すればＯＫ
      */
-    fun decideDealer(){
+    fun decideDealer():Int{
         dealerNum = if(dealerNum == 0){1}else{0}
+        return dealerNum
     }
 
     /**
@@ -57,7 +58,7 @@ class ProgressController {
             result["user"]!!.add("c" + (it.mark+1).toString() + String.format("%02d",(it.num)))
         }
         comCard.forEach {
-            result["com"]!!.add("c" + (it.mark+1).toString() + String.format("%02d",(it.num)))
+            result["com"]!!.add("c999")
         }
         flopCard.forEach {
             result["flop"]!!.add("c" + (it.mark+1).toString() + String.format("%02d",(it.num)))

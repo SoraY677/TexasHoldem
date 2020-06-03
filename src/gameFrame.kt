@@ -3,8 +3,8 @@ import javax.swing.*
 
 class GameFrame : JFrame("hogehoge"){
 
-    public val panelWidth = 500
-    public val panelHeight = 500
+    public val panelWidth = 1280
+    public val panelHeight = 800
 
     init {
         setSize(panelWidth,panelHeight)
@@ -14,8 +14,10 @@ class GameFrame : JFrame("hogehoge"){
         isVisible = true
     }
 
-    fun setVisible(canvas: Canvas){
+    fun setVisible(canvas: Canvas,buttonPanel:JPanel){
         add(canvas,BorderLayout.CENTER)
+        add(buttonPanel,BorderLayout.SOUTH)
+        println(buttonPanel)
         isVisible = true
     }
 
