@@ -4,12 +4,9 @@ class StateModule {
 
     val frame = GameFrame()
     val canvas = FieldCanvas()
-    val btpanel = ButtonPanel(arrayOf("yes","no"))
+    val btpanel = ButtonPanel()
 
-    var paintArray = arrayListOf<Map<String,Any>>()//mutableListOf("bg" to mutableMapOf("x" to 0,"y" to 0,"img" to ""))
-    /**
-     *
-     */
+    var paintMap = mutableMapOf<String,Any>()
 
     /**
      * システム初期化
@@ -22,10 +19,10 @@ class StateModule {
      * ゲーム初期化
      */
     fun state100(){
-        paintArray.clear()
+        paintMap.clear()
         progress.init()
-        paintArray.add(mutableMapOf("x" to  400, "y" to 20, "img" to "handCom"))
-        paintArray.add(mutableMapOf("x" to  800, "y" to 600, "img" to "handYou"))
+        paintMap["handUser"] = mapOf("x" to  400, "y" to 20, "img" to "handCom")
+        paintMap["handYou"] = mapOf("x" to  800, "y" to 600, "img" to "handYou")
     }
 
     /**
@@ -34,10 +31,10 @@ class StateModule {
     fun state101(){
         val dealer = progress.decideDealer()
         if(dealer == 0){
-            paintArray.add(mutableMapOf("x" to  200, "y" to 600, "img" to "Dealer"))
+            paintMap["dealer"] = mapOf("x" to  200, "y" to 600, "img" to "dealer")
         }
         else{
-            paintArray.add(mutableMapOf("x" to  800, "y" to 20, "img" to "Dealer"))
+            paintMap["dealer"] =  mapOf("x" to  800, "y" to 20, "img" to "dealer")
         }
 
 
@@ -52,7 +49,6 @@ class StateModule {
         val cardSize = canvas.getCardSize()
         cardState.forEach{
             var y  = 0
-            println(it)
             when {
                 it.key == "user" -> {
                     y = frame.height/2 +cardSize["y"]!!/2
@@ -65,16 +61,13 @@ class StateModule {
 
                 }
             }
-            println(y)
-            val startX = frame.width/2  - it.value.size*cardSize["x"]!!/2
-            println(startX)
-
+            val startX = frame.width/2  - it.value.size*cardSize["x"]!!
+            var paintArray = arrayListOf<Map<String,Any>>()
             for(cardi in 0 until it.value.size){
-                paintArray.add(mutableMapOf("x" to startX+cardSize["x"]!!*cardi , "y" to y, "img" to it.value[cardi]))
+                paintArray.add(mapOf("x" to startX+cardSize["x"]!!*cardi , "y" to y, "img" to it.value[cardi]))
             }
+            paintMap[it.key] = paintArray
         }
-
-        canvas.repaintCanvas(paintArray)
 
     }
 
@@ -82,8 +75,7 @@ class StateModule {
      * ユーザの行動
      */
     fun state120(){
-        progress.actUserHand()
-
+        progress.user.betMoney = 0
     }
 
     /**
@@ -103,8 +95,35 @@ class StateModule {
     /**
      * 各処理の仲介で処理を行う
      */
-    fun processMedate(){
+    fun processMediate(){
+        var paintArray = arrayListOf<Map<String,Any>>()
+        println(paintMap)
+        paintMap.forEach(){
+            println(it.value)
+            val target = it.value
+            if(target is Map<*,*>){
+                println(it.toString() + "mapです。")
+                val x = target["x"]!!
+                val y = target["y"]
+                val img = target["img"]
+                paintArray.add(mapOf("x" to x!!, "y" to y!!,"img" to img!!))
 
+            } else if(target is ArrayList<*>){
+                target.forEach {
+                    if(it is Map<*,*>) {
+                        val x = it["x"]
+                        val y = it["y"]
+                        val img = it["img"]
+                        paintArray.add(mapOf("x" to x!!, "y" to y!!, "img" to img!!))
+                    }
+                }
+            }
+            else{
+                println("予期しない描画用配列が与えられました。確認してください！")
+            }
+        }
+
+        canvas.repaintCanvas(paintArray)
     }
 
 

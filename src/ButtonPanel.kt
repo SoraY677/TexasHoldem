@@ -1,19 +1,19 @@
+import java.awt.event.ActionEvent
+import java.awt.event.ActionListener
 import javax.swing.JButton
 import javax.swing.JPanel
 
-class ButtonPanel{
+class ButtonPanel {
 
-    var buttonList = arrayListOf<JButton>()
-    var panel =JPanel()
+    var buttonList = mutableMapOf<String, JButton>()
+    var panel = JPanel()
 
-    constructor(array: Array<String>){
-        array.forEach {
-            buttonList.add(JButton(it))
-        }
-        buttonList.forEach{
-            panel.add(it)
+    constructor() {
+        buttonList["raise"] = JButton("raise")
+        buttonList["raise"]!!.addActionListener(ActionListener {
+        })
+        buttonList.forEach {
+            panel.add(it.value)
         }
     }
-
-
 }

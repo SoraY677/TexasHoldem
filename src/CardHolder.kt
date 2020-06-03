@@ -1,6 +1,6 @@
 open class CardHolder {
     val BasePosition:MutableMap<String,Int> = mutableMapOf("x" to 0 , "y" to 0)
-
+    var betMoney = 0
     var cardList:ArrayList<TrumpCard> = arrayListOf()
 
     constructor(){}

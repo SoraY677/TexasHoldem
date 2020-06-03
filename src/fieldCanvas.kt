@@ -17,7 +17,7 @@ class FieldCanvas : Canvas(){
         //UI画像
         imageList["handYou"] = ImageIcon(javaClass.getResource("image/fieldUI/YOU.png")).image
         imageList["handCom"] = ImageIcon(javaClass.getResource("image/fieldUI/COM.png")).image
-        imageList["Dealer"] = ImageIcon(javaClass.getResource("image/fieldUI/Dealer.png")).image
+        imageList["dealer"] = ImageIcon(javaClass.getResource("image/fieldUI/Dealer.png")).image
 
         //トランプ画像
         for (cardId in TrumpBunch().issueCardIdList()){

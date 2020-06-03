@@ -17,7 +17,6 @@ class GameFrame : JFrame("hogehoge"){
     fun setVisible(canvas: Canvas,buttonPanel:JPanel){
         add(canvas,BorderLayout.CENTER)
         add(buttonPanel,BorderLayout.SOUTH)
-        println(buttonPanel)
         isVisible = true
     }
 

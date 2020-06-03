@@ -5,6 +5,7 @@ class StateController {
         stateMgr.state100()
         stateMgr.state101()
         stateMgr.state102()
+        stateMgr.processMediate()
         when{
             state == 0 ->{
                 stateMgr.state0()
