@@ -20,7 +20,7 @@ class Computer:CardHolder() {
     //行動を決定するフェーズ
     fun actHand(flopCardList: ArrayList<TrumpCard>){
 
-        var actStr = this.ioJudgeMaterial(flopCardList)
+//        var actStr = this.ioJudgeMaterial(flopCardList)
 
         //TODO:どういった処理をするのか決める
         //例えばSwitchでどの行動を行うか決めるとか

@@ -10,10 +10,11 @@ class User : CardHolder(){
     fun actHand(){
         //withLockと無限ループによってシステムを一時停止し、ボタン入力(=isWaitInputがtrueになる)を待機する
         val lock = ReentrantLock()
-        lock.withLock {
             while(true){
+                if(isWaitInput == true)break
+                Thread.sleep(100)//入力を受け付けるためにsleep
             }
-        }
+
         isWaitInput = false
     }
 
