@@ -14,7 +14,9 @@ class StateModule {
      * システム初期化
      */
     fun state0(){
+        //各パーツをセット
         frame.setVisible(canvas,btpanel.panel)
+        canvas.settingMapInfo(frame.panelWidth,frame.panelHeight)
     }
 
     /**
@@ -23,8 +25,8 @@ class StateModule {
     fun state100(){
         paintMap.clear()
         progress.init()
-        paintMap["handUser"] = mapOf("x" to  400, "y" to 20, "img" to "handCom")
-        paintMap["handYou"] = mapOf("x" to  800, "y" to 600, "img" to "handYou")
+        canvas.addDrawTargetImg("plateYou")
+        canvas.addDrawTargetImg("plateCom")
     }
 
     /**
@@ -33,10 +35,10 @@ class StateModule {
     fun state101():Int{
         dealer = progress.decideDealer()
         if(dealer == 0){
-            paintMap["dealer"] = mapOf("x" to  200, "y" to 600, "img" to "dealer")
+            canvas.addDrawTargetImg("plateDealer")
         }
         else{
-            paintMap["dealer"] =  mapOf("x" to  800, "y" to 20, "img" to "dealer")
+            canvas.addDrawTargetImg("plateDealer")
         }
         return dealer
     }
@@ -61,12 +63,11 @@ class StateModule {
 
                 }
             }
-            val startX = frame.width/2  - it.value.size*cardSize["x"]!!
+            val startX = frame.width/2  - it.value.size*cardSize["x"]!!/2
             var paintArray = arrayListOf<Map<String,Any>>()
             for(cardi in 0 until it.value.size){
-                paintArray.add(mapOf("x" to startX+cardSize["x"]!!*cardi , "y" to y, "img" to it.value[cardi]))
+                canvas.addDrawTargetImg(it.key.toString() + "Card" + (cardi+1).toString())
             }
-            paintMap[it.key] = paintArray
         }
     }
 
@@ -75,11 +76,16 @@ class StateModule {
         paintMap["userBetMoney"] = mapOf("x" to 20, "y" to 20, "img" to "betMoney")
         paintMap["comBetMoney"] = mapOf("x" to 20, "y" to 20, "img" to "betMoney")
         if(dealer == 0){
-            
+            progress.user.betMoney = 5
+            progress.com.betMoney = 10
         }
         else{
-
+            progress.user.betMoney = 10
+            progress.com.betMoney = 5
         }
+        var paintMoneyArray = arrayListOf<Map<String,Any>>()
+        paintMoneyArray.add(mapOf("x" to 20, "y" to 20, "img" to "betMoney"))
+//        canvas.repaintCanvasStr(paintMoneyArray)
 
     }
 
@@ -133,7 +139,7 @@ class StateModule {
             }
         }
 
-        canvas.repaintCanvas(paintArray)
+        canvas.repaintCanvas()
     }
 
 
