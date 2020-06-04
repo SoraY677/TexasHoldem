@@ -4,7 +4,9 @@ class StateModule {
 
     val frame = GameFrame()
     val canvas = FieldCanvas()
-    val btpanel = ButtonPanel()
+    val btpanel = ButtonPanel(progress.user)
+
+    var dealer= 0
 
     var paintMap = mutableMapOf<String,Any>()
 
@@ -28,17 +30,15 @@ class StateModule {
     /**
      * ディーラーの交代
      */
-    fun state101(){
-        val dealer = progress.decideDealer()
+    fun state101():Int{
+        dealer = progress.decideDealer()
         if(dealer == 0){
             paintMap["dealer"] = mapOf("x" to  200, "y" to 600, "img" to "dealer")
         }
         else{
             paintMap["dealer"] =  mapOf("x" to  800, "y" to 20, "img" to "dealer")
         }
-
-
-
+        return dealer
     }
 
     /**
@@ -68,6 +68,18 @@ class StateModule {
             }
             paintMap[it.key] = paintArray
         }
+    }
+
+    //初期ベット
+    fun state103(){
+        paintMap["userBetMoney"] = mapOf("x" to 20, "y" to 20, "img" to "betMoney")
+        paintMap["comBetMoney"] = mapOf("x" to 20, "y" to 20, "img" to "betMoney")
+        if(dealer == 0){
+            
+        }
+        else{
+
+        }
 
     }
 
@@ -75,7 +87,8 @@ class StateModule {
      * ユーザの行動
      */
     fun state120(){
-        progress.user.betMoney = 0
+//        btpanel.exitProcessWait(progress.user)
+        progress.actUserHand()
     }
 
     /**
@@ -97,12 +110,9 @@ class StateModule {
      */
     fun processMediate(){
         var paintArray = arrayListOf<Map<String,Any>>()
-        println(paintMap)
         paintMap.forEach(){
-            println(it.value)
             val target = it.value
             if(target is Map<*,*>){
-                println(it.toString() + "mapです。")
                 val x = target["x"]!!
                 val y = target["y"]
                 val img = target["img"]

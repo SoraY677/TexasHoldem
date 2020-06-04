@@ -1,11 +1,8 @@
 class StateController {
     var state = 0
     val stateMgr = StateModule()
-    constructor(){
-        stateMgr.state100()
-        stateMgr.state101()
-        stateMgr.state102()
-        stateMgr.processMediate()
+    var dealer = 0
+    fun processLoop(){
         when{
             state == 0 ->{
                 stateMgr.state0()
@@ -16,15 +13,29 @@ class StateController {
                 state = 101
             }
             state == 101 ->{
-                stateMgr.state101()
+                dealer = stateMgr.state101()
                 state = 102
             }
             state == 102 ->{
                 stateMgr.state102()
-                state == 103
+//                state = if(dealer == 0) 120 else 121
+                state = 103
             }
-            state == 120 ->{}
-            state == 121 ->{}
+            state == 103 ->{
+                stateMgr.state103()
+                state = 120
+            }
+
+            state == 120 ->{
+                println("Userのターン")
+                stateMgr.state120()
+                state = 121
+            }
+            state == 121 ->{
+                println("Comのターン")
+                stateMgr.state121()
+                state = 120
+            }
             state == 130 ->{}
             state == 140 ->{}
             state == 141 ->{}
@@ -38,10 +49,9 @@ class StateController {
                 println("不明な遷移")
 //                exitProcess(-1)
             }
-
-
-
-
         }
+        stateMgr.processMediate()
+
+
     }
 }

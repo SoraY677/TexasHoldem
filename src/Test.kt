@@ -11,15 +11,12 @@ class Test {
 
     //テストモード中に実行する処理を記述
     fun process(){
-//        val rules = Rules()
-//
-//        val test = rules.searchHand(
-//            createTestCard2(arrayListOf(5,10), arrayListOf(0,0)),
-//            createTestCard5(arrayListOf(11,12,13,5,7), arrayListOf(0,0,0,0,0))
-//        )
-//
-//        println(test)
-        StateController()
+
+        val stateController = StateController()
+        while(true){
+            stateController.processLoop()
+            Thread.sleep(500) // システム小休止
+        }
     }
 
     fun createTestCard2(numberList: ArrayList<Int> = arrayListOf(1,2),markList: ArrayList<Int> = arrayListOf(0,0)):ArrayList<TrumpCard>{
