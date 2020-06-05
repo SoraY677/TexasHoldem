@@ -4,9 +4,11 @@ class StateModule {
 
     val frame = GameFrame()
     val canvas = FieldCanvas()
-    val btpanel = ButtonPanel(progress.user)
 
     var dealer= 0
+
+    var pot = 0
+    var continueFlag = true
 
     var paintMap = mutableMapOf<String,Any>()
 
@@ -15,7 +17,7 @@ class StateModule {
      */
     fun state0(){
         //各パーツをセット
-        frame.setVisible(canvas,btpanel.panel)
+        frame.setVisible(canvas,progress.user.btpanel.panel)
         canvas.settingMapInfo(frame.panelWidth,frame.panelHeight)
     }
 
@@ -23,6 +25,7 @@ class StateModule {
      * ゲーム初期化
      */
     fun state100(){
+        pot = 0
         paintMap.clear()
         progress.init()
         canvas.addDrawTargetImg("plateYou")
@@ -34,12 +37,8 @@ class StateModule {
      */
     fun state101():Int{
         dealer = progress.decideDealer()
-        if(dealer == 0){
-            canvas.addDrawTargetImg("plateDealer")
-        }
-        else{
-            canvas.addDrawTargetImg("plateDealer")
-        }
+        dealer = 1
+        canvas.changeDealer(dealer)
         return dealer
     }
 
@@ -56,35 +55,60 @@ class StateModule {
         }
     }
 
-    //初期ベット
+    /**
+     * 初期ベット
+     */
     fun state103(){
         canvas.addDrawTargetImg("userChip")
         canvas.addDrawTargetImg("comChip")
+        canvas.addDrawTargetImg("potChip")
         if(dealer == 0){
-            progress.user.betMoney = 5
-            progress.com.betMoney = 10
+            progress.firstBet(5,10)
         }
         else{
-            progress.user.betMoney = 10
-            progress.com.betMoney = 5
+            progress.firstBet(10,5)
         }
         canvas.changeDrawTargetText("userBetAmount",progress.user.betMoney.toString())
         canvas.changeDrawTargetText("comBetAmount",progress.com.betMoney.toString())
+        canvas.changeDrawTargetText("potBetAmount",pot.toString())
 
     }
 
     /**
-     * ユーザの行動
+     * 先攻
      */
-    fun state120(){
-        progress.actUserHand()
+    fun state120(dealer:Int):Map<String,String>{
+        if(dealer == 0) {
+            return progress.actUserHand()
+        }
+        else{
+            return progress.actComHand()
+        }
     }
 
     /**
-     * コンピュータの行動
+     * 後攻
      */
-    fun state121(){
-        progress.actComHand()
+    fun state121(dealer:Int):Map<String,String>{
+        if(dealer == 0) {
+            return progress.actComHand()
+        }
+        else{
+            return progress.actUserHand()
+        }
+    }
+
+    /**
+     * 両方の行動
+     */
+    fun state122(){
+        pot += progress.user.betMoney
+        pot += progress.com.betMoney
+        progress.user.betMoney = 0
+        progress.com.betMoney = 0
+        canvas.changeDrawTargetText("userBetAmount",progress.user.betMoney.toString())
+        canvas.changeDrawTargetText("comBetAmount",progress.com.betMoney.toString())
+        canvas.changeDrawTargetText("potBetAmount",pot.toString())
     }
 
     /**

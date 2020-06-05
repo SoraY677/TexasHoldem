@@ -3,10 +3,9 @@ open class CardHolder {
     var betMoney = 0
     var cardList:ArrayList<TrumpCard> = arrayListOf()
 
-    constructor(){}
 
 
-    fun Init(){
+    open fun Init(){
         cardList = arrayListOf()
     }
 
@@ -17,6 +16,7 @@ open class CardHolder {
         receiveCardList.forEach {  recieveCard ->
             cardList.add(recieveCard)
         }
-
     }
+
+
 }

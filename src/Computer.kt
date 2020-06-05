@@ -1,6 +1,21 @@
 class Computer:CardHolder() {
 
     /**
+     * 行動を決定するフェーズ
+     */
+    fun actHand(flopCardList: ArrayList<TrumpCard>):String{
+
+//        var actStr = this.ioJudgeMaterial(flopCardList)
+
+        //TODO:どういった処理をするのか決める
+        //例えばSwitchでどの行動を行うか決めるとか
+
+
+        println("com action done.")//TODO : DEL AFTER
+        return "Hoge"
+    }
+
+    /**
      * 標準入出力を行う
      */
     fun ioJudgeMaterial(flopCardList:ArrayList<TrumpCard>):String{
@@ -15,18 +30,6 @@ class Computer:CardHolder() {
         val inputStr = readLine().toString()
 
         return inputStr
-    }
-
-    //行動を決定するフェーズ
-    fun actHand(flopCardList: ArrayList<TrumpCard>){
-
-//        var actStr = this.ioJudgeMaterial(flopCardList)
-
-        //TODO:どういった処理をするのか決める
-        //例えばSwitchでどの行動を行うか決めるとか
-
-
-        println("com action done.")//TODO : DEL AFTER
     }
 
 

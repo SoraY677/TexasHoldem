@@ -10,8 +10,6 @@ class GameFrame : JFrame("hogehoge"){
         setSize(panelWidth,panelHeight)
         layout = BorderLayout()
         defaultCloseOperation = JFrame.EXIT_ON_CLOSE
-
-        isVisible = true
     }
 
     fun setVisible(canvas: Canvas,buttonPanel:JPanel){

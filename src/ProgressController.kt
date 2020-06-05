@@ -11,6 +11,8 @@ class ProgressController {
     val flop = Flop()
     val trumpBunch = TrumpBunch()
 
+    var pot = 0;
+
     val rules = Rules()
 
     var img:ArrayList<MutableMap<String,Any>>? = arrayListOf()
@@ -23,8 +25,13 @@ class ProgressController {
 
     }
 
+    /**
+     * ゲームの初期化
+     */
     fun init(){
         user.Init()
+        user.btpanel.disableAllButton()
+        com.Init()
         com.Init()
         flop.Init()
         trumpBunch.shuffle()
@@ -67,7 +74,6 @@ class ProgressController {
         return result
     }
 
-
     /**
      * 場に新カードを追加する
      */
@@ -76,18 +82,27 @@ class ProgressController {
     }
 
     /**
+     * 最初の強制ベット
+     */
+    fun firstBet(userbet:Int,combet:Int){
+        user.betMoney =  userbet
+        com.betMoney = combet
+    }
+
+    /**
      * ユーザの行動
      */
-    fun actUserHand(){
+    fun actUserHand():Map<String,String>{
         user.actHand()
+        return mapOf("hand" to "user","select" to user.exchangeProperty())
     }
 
 
     /**
      * コンピュータの行動
      */
-    fun actComHand(){
-        com.actHand(flop.cardList)
+    fun actComHand():Map<String,String>{
+        return mapOf("hand" to "com","select" to com.actHand(flop.cardList))
     }
 
 
