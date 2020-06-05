@@ -9,4 +9,11 @@ class TrumpCard {
         this.num = num
         this.mark = mark
     }
+
+    /**
+     * 渡されたカードからカードIDを発行する
+     */
+    fun publishId():String{
+        return "c" + (this.mark+1).toString() + String.format("%02d",(this.num))
+    }
 }

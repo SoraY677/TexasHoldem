@@ -45,9 +45,22 @@ class StateController {
             //両方の行動終了後の情報整理
             122 ->{
                 stateMgr.state122()
+                println("122")
+                when(act["select"]){
+                    "Flod" ->{
+
+                    }
+                    "Call" ->{
+                        state = 130
+                    }
+
+                }
             }
             //
-            130 ->{}
+            130 ->{
+                stateMgr.state130()
+                state = 120
+            }
             140 ->{}
             141 ->{}
             142 ->{}

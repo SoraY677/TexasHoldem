@@ -22,8 +22,7 @@ class ButtonPanel {
             buttonList[name] = JButton(name)
             buttonList[name]!!.addActionListener({
 
-
-                if (name == "Fold" || name == "Check") {
+                if (name == "Fold" || name == "Check" || name == "Call") {
                     user.actionName = name
                     user.isWaitInput = true
                 } else {

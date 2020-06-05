@@ -62,13 +62,13 @@ class ProgressController {
         //カード情報を返す
         var result = mutableMapOf("user" to arrayListOf<String>(), "com" to arrayListOf<String>(),"flop" to arrayListOf<String>())
         userCard.forEach {
-            result["user"]!!.add("c" + (it.mark+1).toString() + String.format("%02d",(it.num)))
+            result["user"]!!.add(it.publishId())
         }
         comCard.forEach {
             result["com"]!!.add("c999")
         }
         flopCard.forEach {
-            result["flop"]!!.add("c" + (it.mark+1).toString() + String.format("%02d",(it.num)))
+            result["flop"]!!.add(it.publishId())
         }
 
         return result
@@ -77,8 +77,10 @@ class ProgressController {
     /**
      * 場に新カードを追加する
      */
-    fun addNewFlopCard(){
-        flop.recieveCards(arrayListOf(trumpBunch.drawCardfromTop()))
+    fun addNewFlopCard():String{
+        val card = trumpBunch.drawCardfromTop()
+        flop.recieveCards(arrayListOf(card))
+        return card.publishId()
     }
 
     /**

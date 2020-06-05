@@ -12,6 +12,8 @@ class StateModule {
 
     var paintMap = mutableMapOf<String,Any>()
 
+    var flopCardNum = 4
+
     /**
      * システム初期化
      */
@@ -115,7 +117,9 @@ class StateModule {
      * 場に新カードの追加
      */
     fun state130(){
-        progress.addNewFlopCard()
+        val id = progress.addNewFlopCard()
+        canvas.changeTrumpCard("flopCard" + flopCardNum.toString(),id)
+        flopCardNum ++
     }
 
     /**

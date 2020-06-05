@@ -45,7 +45,7 @@ class TrumpBunch {
 
 
     // カードリストの一番上からカードをひく
-    fun drawCardfromTop():TrumpCard{
+    fun drawCardfromTop():TrumpCard {
         var topCard = cardList[0]
         cardList.removeAt(0)
         return topCard
