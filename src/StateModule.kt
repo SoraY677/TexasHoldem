@@ -11,8 +11,9 @@ class StateModule {
     var continueFlag = true
 
     var paintMap = mutableMapOf<String,Any>()
-
-    var flopCardNum = 4
+    var flopCardNum = 4 //場のカード数
+    var battleResult = 0 // 勝敗
+    var playNum = 0 // プレイ回数
 
     /**
      * システム初期化
@@ -28,8 +29,10 @@ class StateModule {
      */
     fun state100(){
         pot = 0
+        flopCardNum = 4
         paintMap.clear()
         progress.init()
+        canvas.init()
         canvas.addDrawTargetImg("plateYou")
         canvas.addDrawTargetImg("plateCom")
     }
@@ -39,7 +42,6 @@ class StateModule {
      */
     fun state101():Int{
         dealer = progress.decideDealer()
-        dealer = 1
         canvas.changeDealer(dealer)
         return dealer
     }
@@ -103,7 +105,7 @@ class StateModule {
     /**
      * 両方の行動
      */
-    fun state122(){
+    fun state122():Int{
         pot += progress.user.betMoney
         pot += progress.com.betMoney
         progress.user.betMoney = 0
@@ -111,6 +113,7 @@ class StateModule {
         canvas.changeDrawTargetText("userBetAmount",progress.user.betMoney.toString())
         canvas.changeDrawTargetText("comBetAmount",progress.com.betMoney.toString())
         canvas.changeDrawTargetText("potBetAmount",pot.toString())
+        return flopCardNum
     }
 
     /**
@@ -123,35 +126,60 @@ class StateModule {
     }
 
     /**
+     * カードオープン
+     */
+    fun state140(){
+        val comHand = progress.openHand()
+        for(cardi in 0 until comHand.size){
+            canvas.changeTrumpCard("comCard" + (cardi + 1).toString(),comHand[cardi].publishId())
+        }
+    }
+
+    /**
+     * ユーザーとコンピュータの役判定
+     */
+    fun state141(){
+        battleResult = progress.judgeHandPower()
+    }
+
+    /**
+     * 結果表示
+     */
+    fun state150(){
+
+    }
+
+    /**
+     * チップ移動・プレイ数＋１
+     */
+    fun state151(){
+        if(battleResult == 0){
+            progress.user.betMoney += pot
+        }
+        else if(battleResult == 1){
+            progress.com.betMoney += pot}
+
+        else if(battleResult == 2){
+            progress.user.betMoney += pot/2
+            progress.com.betMoney += pot/2
+        }
+        else{
+            error("予期せぬ勝敗判定が行われました!")
+        }
+        pot = 0
+
+        //プレイ回数 +1
+        playNum++;
+
+    }
+
+
+
+    /**
      * 各処理の仲介で処理を行う
      */
     fun processMediate(){
-        var paintArray = arrayListOf<Map<String,Any>>()
-        paintMap.forEach(){
-            val target = it.value
-            if(target is Map<*,*>){
-                val x = target["x"]!!
-                val y = target["y"]
-                val img = target["img"]
-                paintArray.add(mapOf("x" to x!!, "y" to y!!,"img" to img!!))
-
-            } else if(target is ArrayList<*>){
-                target.forEach {
-                    if(it is Map<*,*>) {
-                        val x = it["x"]
-                        val y = it["y"]
-                        val img = it["img"]
-                        paintArray.add(mapOf("x" to x!!, "y" to y!!, "img" to img!!))
-                    }
-                }
-            }
-            else{
-                println("予期しない描画用配列が与えられました。確認してください！")
-            }
-        }
-
         canvas.repaintCanvas()
     }
-
 
 }

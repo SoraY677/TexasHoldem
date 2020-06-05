@@ -32,6 +32,10 @@ class Computer:CardHolder() {
         return inputStr
     }
 
+    fun openCard():ArrayList<TrumpCard>{
+        return cardList
+    }
+
 
 
 }

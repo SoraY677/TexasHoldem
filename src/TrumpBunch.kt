@@ -12,8 +12,7 @@ class TrumpBunch {
     val CARD_NUM_MAX = MARK_MAX * NUM_MAX
 
 
-    constructor(){
-        // 山札の各カードを生成
+    fun init(){
         for(cardi in 0 until CARD_NUM_MAX) {
             cardList.add(TrumpCard(cardi % NUM_MAX + 1,cardi / NUM_MAX))
         }

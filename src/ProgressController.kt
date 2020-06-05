@@ -34,6 +34,7 @@ class ProgressController {
         com.Init()
         com.Init()
         flop.Init()
+        trumpBunch.init()
         trumpBunch.shuffle()
     }
 
@@ -107,14 +108,34 @@ class ProgressController {
         return mapOf("hand" to "com","select" to com.actHand(flop.cardList))
     }
 
+    /**
+     *
+     */
+    fun openHand():ArrayList<TrumpCard>{
+        return com.openCard()
+    }
 
     /**
      * ユーザ・コンピュータの役判定
      * @return judgeResult
      */
-    fun judgeHandPower(){
-
+    fun judgeHandPower():Int{
+        val userHandPower = rules.searchHand(user.cardList,flop.cardList)
+        val comHandPower = rules.searchHand(com.cardList,flop.cardList)
+        if(userHandPower["power"]!! > comHandPower["power"]!!){
+            return 0
+        }
+        else if(userHandPower["power"]!! < comHandPower["power"]!!){
+            return 1
+        }
+        else{
+            if(userHandPower["highNum"]!! > comHandPower["highNum"]!!) return 0 //ユーザの勝ち
+            else if(userHandPower["highNum"]!! > comHandPower["highNum"]!!) return 1 //コンピュータの勝ち
+            else return 2 //　引き分け
+        }
     }
+
+
 
 
     /**

@@ -27,7 +27,7 @@ class Rules {
      * @return {handPower:Number,highestNum:Number} 役の強さと手札のうち最も高いカードの数値
      *
      */
-    fun searchHand(handCard:ArrayList<TrumpCard>, flopCard:ArrayList<TrumpCard>):Int{
+    fun searchHand(handCard:ArrayList<TrumpCard>, flopCard:ArrayList<TrumpCard>):Map<String,Int>{
 
         //配列を結合する
         val origin7Card = handCard.plus(flopCard)
@@ -63,7 +63,9 @@ class Rules {
             result = max(result,judgeStraitFlush(trumpCardList))
         }
 
-        return result
+        var highcardNum = if(handCard[0].num > handCard[1].num) handCard[0].num else handCard[1].num
+
+        return mapOf("power" to result,"highNum" to highcardNum)
 
     }
 
@@ -286,7 +288,7 @@ class Rules {
                 li++
                 ri--
             }
-            return li
+            return -1
         }
 
         val partitionIndex = partition()

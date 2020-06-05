@@ -22,6 +22,7 @@ class StateController {
 //                state = if(dealer == 0) 120 else 121
                 state = 103
             }
+            //
             103 ->{
                 stateMgr.state103()
                 state = 120
@@ -39,19 +40,22 @@ class StateController {
                 act = stateMgr.state121(dealer)
                 //Foldかcallで次のカード
                 if(act["select"] == "Fold" || act["select"] == "Call")state = 122
+                else if(act["select"]== "Call"){
+                    state = 122
+                }
                 //それ以外は継続
                 else state = 120
             }
             //両方の行動終了後の情報整理
             122 ->{
-                stateMgr.state122()
-                println("122")
+                val flopCardNum = stateMgr.state122()
                 when(act["select"]){
-                    "Flod" ->{
-
+                    "Fold" ->{
+                        state = 160
                     }
                     "Call" ->{
-                        state = 130
+                        if(flopCardNum > 5)state = 140
+                        else state = 130
                     }
 
                 }
@@ -61,13 +65,22 @@ class StateController {
                 stateMgr.state130()
                 state = 120
             }
-            140 ->{}
-            141 ->{}
-            142 ->{}
-            143 ->{}
-            150 ->{}
-            151 ->{}
-            152 ->{}
+            140 ->{
+                stateMgr.state140()
+                state = 141
+            }
+            141 ->{
+                stateMgr.state141()
+                state = 150
+            }
+            150 ->{
+                stateMgr.state150()
+                state = 151
+            }
+            151 ->{
+                stateMgr.state151()
+                state = 100
+            }
             160 ->{}
             else ->{
 //                println("不明な遷移")
