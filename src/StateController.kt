@@ -37,7 +37,9 @@ class StateController {
             //後攻の行動
             121 ->{
                 act = stateMgr.state121(dealer)
+                //Foldかcallで次のカード
                 if(act["select"] == "Fold" || act["select"] == "Call")state = 122
+                //それ以外は継続
                 else state = 120
             }
             //両方の行動終了後の情報整理

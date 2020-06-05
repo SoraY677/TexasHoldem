@@ -1,5 +1,6 @@
 import java.awt.Button
 import java.util.concurrent.locks.ReentrantLock
+import java.util.regex.Pattern
 
 class User : CardHolder(){
     var isWaitInput = false
@@ -25,27 +26,27 @@ class User : CardHolder(){
      * ユーザーの行動から関連数値の変動を行う
      */
     fun exchangeProperty():String{
-        when(actionName){
-            "Fold" -> {
-            }
-            "Check" ->{
+            var text = ""
+            when (actionName) {
+                "Bet" -> {
+                    text = btpanel.bettext.getText()
+                }
+                "Raise" -> {
 
-            }
-            "Bet"->{
+                }
+                "Call" -> {
 
-            }
-            "Raise"->{
+                }
+                "All-in" -> {
 
+                }
             }
-            "Call"->{
 
-            }
-            "All-in"->{
-
-            }
-        }
         return actionName
     }
+
+
+
 
 
 }

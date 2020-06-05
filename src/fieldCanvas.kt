@@ -40,7 +40,11 @@ class FieldCanvas : Canvas(){
 
     }
 
-    fun settingMapInfo(width:Int,Height:Int){
+    /**
+     * 画像・文字の位置情報を定義
+     * (Width,Heightが必要になるため小分け)
+     */
+    fun settingMapInfo(width:Int,height:Int){
 
         /******************画像の位置情報まとめ***************************/
         //画像情報を簡単羅列するための関数
@@ -53,15 +57,15 @@ class FieldCanvas : Canvas(){
             "plateYou" to ImgMap(800,600),//Youを表すプレート
             "plateCom" to ImgMap(400,20),//Comを表すプレート
             "plateDealer" to ImgMap(200,600),//dealerを表すプレート
-            "flopCard1" to ImgMap(width/2- 5*cardSize["x"]!!/2+0*cardSize["x"]!!, Height/2-cardSize["y"]!!/2),
-            "flopCard2" to ImgMap(width/2- 5*cardSize["x"]!!/2+1*cardSize["x"]!!, Height/2-cardSize["y"]!!/2 ),
-            "flopCard3" to ImgMap(width/2- 5*cardSize["x"]!!/2+2*cardSize["x"]!!, Height/2-cardSize["y"]!!/2),
-            "flopCard4" to ImgMap(width/2- 5*cardSize["x"]!!/2+3*cardSize["x"]!!, Height/2-cardSize["y"]!!/2),
-            "flopCard5" to ImgMap(width/2- 5*cardSize["x"]!!/2+4*cardSize["x"]!!, Height/2-cardSize["y"]!!/2 ),
-            "userCard1" to ImgMap(width/2- 2*cardSize["x"]!!/2+0*cardSize["x"]!!, Height/2+cardSize["y"]!!/2),
-            "userCard2" to ImgMap(width/2- 2*cardSize["x"]!!/2+1*cardSize["x"]!!, Height/2+cardSize["y"]!!/2),
-            "comCard1" to ImgMap(width/2- 2*cardSize["x"]!!/2+0*cardSize["x"]!!, Height/2-cardSize["y"]!!*3/2),
-            "comCard2" to ImgMap(width/2- 2*cardSize["x"]!!/2+1*cardSize["x"]!!, Height/2-cardSize["y"]!!*3/2),
+            "flopCard1" to ImgMap(width/2- 5*cardSize["x"]!!/2+0*cardSize["x"]!!, height/2-cardSize["y"]!!/2),
+            "flopCard2" to ImgMap(width/2- 5*cardSize["x"]!!/2+1*cardSize["x"]!!, height/2-cardSize["y"]!!/2 ),
+            "flopCard3" to ImgMap(width/2- 5*cardSize["x"]!!/2+2*cardSize["x"]!!, height/2-cardSize["y"]!!/2),
+            "flopCard4" to ImgMap(width/2- 5*cardSize["x"]!!/2+3*cardSize["x"]!!, height/2-cardSize["y"]!!/2),
+            "flopCard5" to ImgMap(width/2- 5*cardSize["x"]!!/2+4*cardSize["x"]!!, height/2-cardSize["y"]!!/2 ),
+            "userCard1" to ImgMap(width/2- 2*cardSize["x"]!!/2+0*cardSize["x"]!!, height/2+cardSize["y"]!!/2),
+            "userCard2" to ImgMap(width/2- 2*cardSize["x"]!!/2+1*cardSize["x"]!!, height/2+cardSize["y"]!!/2),
+            "comCard1" to ImgMap(width/2- 2*cardSize["x"]!!/2+0*cardSize["x"]!!, height/2-cardSize["y"]!!*3/2),
+            "comCard2" to ImgMap(width/2- 2*cardSize["x"]!!/2+1*cardSize["x"]!!, height/2-cardSize["y"]!!*3/2),
             "userChip" to ImgMap(800,520),
             "comChip" to ImgMap(340,100),
             "potChip" to ImgMap(1000,300)
@@ -80,7 +84,10 @@ class FieldCanvas : Canvas(){
     }
 
 
-
+    /**
+     * 描画処理
+     * repaint()で呼び出される
+     */
     override fun paint(g: Graphics) {
 
         //配列で渡された画像を表示する
@@ -99,7 +106,6 @@ class FieldCanvas : Canvas(){
     fun changeDealer(dealer:Int){
         addDrawTargetImg("plateDealer",dealerPosition[dealer]["x"]!!,dealerPosition[dealer]["y"]!!)
     }
-
 
     /**
      * トランプカードを変更する
@@ -121,7 +127,7 @@ class FieldCanvas : Canvas(){
 
 
     /**
-     *
+     * テキストを追加・変更
      */
     fun changeDrawTargetText(targetKey:String,text:String){
         val x = drawStringAllMap[targetKey]!!["x"].toString().toInt()
@@ -142,6 +148,7 @@ class FieldCanvas : Canvas(){
         repaint()
     }
 
+    
     fun getCardSize():Map<String,Int>{
         var x:Int = imageList["c101"]!!.getWidth(null)
         var y:Int = imageList["c101"]!!.getHeight(null)
