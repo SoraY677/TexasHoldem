@@ -12,7 +12,7 @@ class Computer:CardHolder() {
 
 
         println("com action done.")//TODO : DEL AFTER
-        return "Hoge"
+        return "Call"
     }
 
     /**

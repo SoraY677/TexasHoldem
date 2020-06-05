@@ -122,6 +122,7 @@ class StateModule {
     fun state130(){
         val id = progress.addNewFlopCard()
         canvas.changeTrumpCard("flopCard" + flopCardNum.toString(),id)
+        println(id)
         flopCardNum ++
     }
 

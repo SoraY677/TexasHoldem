@@ -13,6 +13,7 @@ class TrumpBunch {
 
 
     fun init(){
+        cardList = arrayListOf()
         for(cardi in 0 until CARD_NUM_MAX) {
             cardList.add(TrumpCard(cardi % NUM_MAX + 1,cardi / NUM_MAX))
         }

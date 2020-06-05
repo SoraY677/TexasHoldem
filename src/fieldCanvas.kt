@@ -100,6 +100,11 @@ class FieldCanvas : Canvas(){
         }
     }
 
+    fun init(){
+        drawTargetImgMap = mutableMapOf()
+        drawTargetStrMap = mutableMapOf()
+    }
+
     /**
      * ディーラーを変更
      */

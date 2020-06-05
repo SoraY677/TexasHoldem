@@ -288,7 +288,7 @@ class Rules {
                 li++
                 ri--
             }
-            return -1
+            return li
         }
 
         val partitionIndex = partition()

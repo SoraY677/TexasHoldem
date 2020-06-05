@@ -1,3 +1,4 @@
+import com.sun.javafx.css.Rule
 import java.lang.reflect.Field
 import kotlin.system.exitProcess
 
@@ -11,12 +12,24 @@ class Test {
 
     //テストモード中に実行する処理を記述
     fun process(){
-
-        val stateController = StateController()
-        while(true){
-            stateController.processLoop()
-            Thread.sleep(500) // システム小休止
+        val trumpBunch = TrumpBunch()
+        trumpBunch.init()
+        trumpBunch.shuffle()
+        val test1 = arrayListOf(trumpBunch.drawCardfromTop(),trumpBunch.drawCardfromTop())
+        val test2 = arrayListOf(trumpBunch.drawCardfromTop(),trumpBunch.drawCardfromTop(),trumpBunch.drawCardfromTop(),trumpBunch.drawCardfromTop(),trumpBunch.drawCardfromTop(),trumpBunch.drawCardfromTop(),trumpBunch.drawCardfromTop(),trumpBunch.drawCardfromTop(),trumpBunch.drawCardfromTop(),trumpBunch.drawCardfromTop(),trumpBunch.drawCardfromTop(),trumpBunch.drawCardfromTop(),trumpBunch.drawCardfromTop(),trumpBunch.drawCardfromTop(),trumpBunch.drawCardfromTop(),trumpBunch.drawCardfromTop(),trumpBunch.drawCardfromTop(),trumpBunch.drawCardfromTop(),trumpBunch.drawCardfromTop(),trumpBunch.drawCardfromTop())
+        val test3 = arrayListOf(trumpBunch.drawCardfromTop(),trumpBunch.drawCardfromTop())
+        test1.forEach {
+            println(mapOf("num" to it.num, "mark" to it.mark))
         }
+        test2.forEach {
+            println(mapOf("num" to it.num, "mark" to it.mark))
+        }
+        test3.forEach {
+            println(mapOf("num" to it.num, "mark" to it.mark))
+        }
+        val rules = Rules()
+        rules.searchHand(test1,test2)
+
     }
 
     fun createTestCard2(numberList: ArrayList<Int> = arrayListOf(1,2),markList: ArrayList<Int> = arrayListOf(0,0)):ArrayList<TrumpCard>{
