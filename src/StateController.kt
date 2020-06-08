@@ -1,3 +1,5 @@
+import kotlin.system.exitProcess
+
 class StateController {
     var state = 0
     val stateMgr = StateModule()
@@ -38,7 +40,6 @@ class StateController {
             //後攻の行動
             121 ->{
                 act = stateMgr.state121(dealer)
-                println(act["select"])
                 //Foldかcallで次のカード
                 if(act["select"] == "Fold" || act["select"] == "Call")state = 122
                 else if(act["select"]== "Call"){
@@ -84,8 +85,8 @@ class StateController {
             }
             160 ->{}
             else ->{
-//                println("不明な遷移")
-//                exitProcess(-1)
+                println("不明な遷移")
+                exitProcess(-1)
             }
         }
         println(state)

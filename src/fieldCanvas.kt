@@ -26,9 +26,11 @@ class FieldCanvas : Canvas(){
         imageList["plateYou"] = ImageIcon(javaClass.getResource("image/fieldUI/YOU.png")).image
         imageList["plateCom"] = ImageIcon(javaClass.getResource("image/fieldUI/COM.png")).image
         imageList["plateDealer"] = ImageIcon(javaClass.getResource("image/fieldUI/Dealer.png")).image
-        imageList["userChip"] = ImageIcon(javaClass.getResource("image/fieldUI/betMoney.png")).image
+        imageList["userChip"] = ImageIcon(javaClass.getResource("image/fieldUI/betChip.png")).image
         imageList["comChip"] = imageList["userChip"]!!
         imageList["potChip"] = imageList["userChip"]!!
+        imageList["userAllChip"] = ImageIcon(javaClass.getResource("image/fieldUI/allChip.png")).image
+        imageList["comAllChip"] = ImageIcon(javaClass.getResource("image/fieldUI/allChip.png")).image
 
         //トランプ画像
         for (cardId in TrumpBunch().issueCardIdList()){
@@ -68,13 +70,17 @@ class FieldCanvas : Canvas(){
             "comCard2" to ImgMap(width/2- 2*cardSize["x"]!!/2+1*cardSize["x"]!!, height/2-cardSize["y"]!!*3/2),
             "userChip" to ImgMap(800,520),
             "comChip" to ImgMap(340,100),
-            "potChip" to ImgMap(1000,300)
+            "potChip" to ImgMap(1000,300),
+            "userAllChip" to ImgMap(1000,600),
+            "comAllChip" to ImgMap(200,20)
         )
 
         drawStringAllMap = mapOf(
             "userBetAmount" to mapOf("x" to 800, "y" to 520),
             "comBetAmount" to mapOf("x" to 340, "y" to 100),
-            "potBetAmount" to mapOf("x" to 1200, "y" to 300)
+            "potBetAmount" to mapOf("x" to 1200, "y" to 300),
+            "userAllChipAmount" to mapOf("x" to 1100, "y" to 620),
+            "comAllChipAmount" to mapOf("x" to 250, "y" to 40)
         )
 
         dealerPosition = arrayOf(

@@ -89,7 +89,9 @@ class ProgressController {
      */
     fun firstBet(userbet:Int,combet:Int){
         user.betMoney =  userbet
+        user.holdMoney -= userbet
         com.betMoney = combet
+        com.holdMoney -= combet
     }
 
     /**

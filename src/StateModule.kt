@@ -35,6 +35,10 @@ class StateModule {
         canvas.init()
         canvas.addDrawTargetImg("plateYou")
         canvas.addDrawTargetImg("plateCom")
+        canvas.addDrawTargetImg("userAllChip")
+        canvas.addDrawTargetImg("comAllChip")
+        canvas.changeDrawTargetText("userAllChipAmount",progress.user.holdMoney.toString())
+        canvas.changeDrawTargetText("comAllChipAmount",progress.com.holdMoney.toString())
     }
 
     /**
@@ -75,6 +79,8 @@ class StateModule {
         canvas.changeDrawTargetText("userBetAmount",progress.user.betMoney.toString())
         canvas.changeDrawTargetText("comBetAmount",progress.com.betMoney.toString())
         canvas.changeDrawTargetText("potBetAmount",pot.toString())
+        canvas.changeDrawTargetText("userAllChipAmount",progress.user.holdMoney.toString())
+        canvas.changeDrawTargetText("comAllChipAmount",progress.com.holdMoney.toString())
 
     }
 
@@ -113,6 +119,8 @@ class StateModule {
         canvas.changeDrawTargetText("userBetAmount",progress.user.betMoney.toString())
         canvas.changeDrawTargetText("comBetAmount",progress.com.betMoney.toString())
         canvas.changeDrawTargetText("potBetAmount",pot.toString())
+        canvas.changeDrawTargetText("userAllChipAmount",progress.user.holdMoney.toString())
+        canvas.changeDrawTargetText("comAllChipAmount",progress.com.holdMoney.toString())
         return flopCardNum
     }
 
@@ -122,7 +130,6 @@ class StateModule {
     fun state130(){
         val id = progress.addNewFlopCard()
         canvas.changeTrumpCard("flopCard" + flopCardNum.toString(),id)
-        println(id)
         flopCardNum ++
     }
 
@@ -154,15 +161,19 @@ class StateModule {
      * チップ移動・プレイ数＋１
      */
     fun state151(){
+
         if(battleResult == 0){
-            progress.user.betMoney += pot
+            println("user win")
+            progress.user.holdMoney += pot
         }
         else if(battleResult == 1){
-            progress.com.betMoney += pot}
-
+            println("com win")
+            progress.com.holdMoney += pot
+        }
         else if(battleResult == 2){
-            progress.user.betMoney += pot/2
-            progress.com.betMoney += pot/2
+            println("drow")
+            progress.user.holdMoney += pot/2
+            progress.com.holdMoney += pot/2
         }
         else{
             error("予期せぬ勝敗判定が行われました!")

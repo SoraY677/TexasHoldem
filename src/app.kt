@@ -3,6 +3,6 @@ fun main(){
     val stateController = StateController()
     while(true){
         stateController.processLoop()
-        Thread.sleep(500) // システム小休止
+        Thread.sleep(200) // システム小休止
     }
 }
