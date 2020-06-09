@@ -26,7 +26,7 @@ class User : CardHolder(){
      * 現在の状況から押せるボタンを制限する
      * @return 使えなくするボタンリスト
      */
-    fun limitActionButton(comhand:String = ""){
+    fun limitActionButton(act:String){
 
 
         //一度、全てのボタンを使えるようにする
@@ -34,19 +34,17 @@ class User : CardHolder(){
 
         var disableBtList:ArrayList<String> = arrayListOf()
         //何も入力されていない状況
-        if(comhand == ""){
-            disableBtList = arrayListOf("Raise","Call")
-        }
-        else{
             disableBtList =
-            when(comhand){
+            when(act){
+                "initBet" -> arrayListOf("Check","Bet")
+                "firstAct" -> arrayListOf("Raise","Call")
                 "Check" ->arrayListOf("Raise","Call","Bet")
                 "Bet"->arrayListOf("Check","Bet")
-                "Raise"->arrayListOf("Check","Bet","Raise")
+                "Raise"->arrayListOf("Check","Bet")
                 "All-in"->arrayListOf("Raise","Call")//TODO:こいつは曲者だ！
                 else -> arrayListOf("")
             }
-        }
+
 
         disableBtList.forEach {
             btpanel.disableButton(it)

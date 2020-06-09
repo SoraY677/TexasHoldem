@@ -97,8 +97,8 @@ class ProgressController {
     /**
      * ユーザの行動
      */
-    fun actUserHand(comhand:String=""):Map<String,String>{
-        user.limitActionButton(comhand)
+    fun actUserHand(act:String):Map<String,String>{
+        user.limitActionButton(act)
         user.actHand()
         return user.latestAct
     }

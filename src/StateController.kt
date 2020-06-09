@@ -27,7 +27,7 @@ class StateController {
             //
             103 ->{
                 stateMgr.state103()
-                act= mapOf("select" to "")
+                act= mapOf("select" to "initBet")
                 state = 120
             }
             //先行の行動
@@ -65,7 +65,7 @@ class StateController {
             //
             130 ->{
                 stateMgr.state130()
-                act= mapOf("select" to "")
+                act= mapOf("select" to "firstAct")
                 state = 120
             }
             140 ->{
