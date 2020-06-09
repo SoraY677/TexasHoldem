@@ -27,44 +27,45 @@ class StateController {
             //
             103 ->{
                 stateMgr.state103()
+                act= mapOf("select" to "")
                 state = 120
             }
             //先行の行動
             120 ->{
-                act = stateMgr.state120(dealer)
-                //Foldしていたら集計
-                if(act["select"] == "Fold") state = 122
+                act = stateMgr.state120(dealer,act["select"]!!)
+                if(act["select"] == "Fold" || act["select"] == "Call") state = 122
                 //それ以外であれば後攻の行動に移る
                 else state=121
             }
             //後攻の行動
             121 ->{
-                act = stateMgr.state121(dealer)
+                act = stateMgr.state121(dealer,act["select"]!!)
                 //Foldかcallで次のカード
-                if(act["select"] == "Fold" || act["select"] == "Call")state = 122
-                else if(act["select"]== "Call"){
+                if(act["select"] == "Fold" || act["select"] == "Check" )
                     state = 122
-                }
+                else if(act["select"]== "Call")
+                    state = 122
                 //それ以外は継続
                 else state = 120
             }
             //両方の行動終了後の情報整理
             122 ->{
-                val flopCardNum = stateMgr.state122()
+                val loopNum = stateMgr.state122()
+                state = 130
                 when(act["select"]){
+                    //降りていた場合は
                     "Fold" ->{
-                        state = 160
+                        //降りていない方を勝利としてpot金移動フェーズに移行する
+                        stateMgr.battleResult = if(act["hand"] == "user") 1 else 0
+                        state = 151
                     }
-                    "Call" ->{
-                        if(flopCardNum > 5)state = 140
-                        else state = 130
-                    }
-
                 }
+                if(loopNum > 2)state = 140
             }
             //
             130 ->{
                 stateMgr.state130()
+                act= mapOf("select" to "")
                 state = 120
             }
             140 ->{

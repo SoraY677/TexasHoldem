@@ -69,7 +69,7 @@ class ProgressController {
             result["com"]!!.add("c999")
         }
         flopCard.forEach {
-            result["flop"]!!.add(it.publishId())
+            result["flop"]!!.add("c999")
         }
 
         return result
@@ -97,9 +97,10 @@ class ProgressController {
     /**
      * ユーザの行動
      */
-    fun actUserHand():Map<String,String>{
+    fun actUserHand(comhand:String=""):Map<String,String>{
+        user.limitActionButton(comhand)
         user.actHand()
-        return mapOf("hand" to "user","select" to user.exchangeProperty())
+        return user.latestAct
     }
 
 
@@ -107,8 +108,10 @@ class ProgressController {
      * コンピュータの行動
      */
     fun actComHand():Map<String,String>{
-        return mapOf("hand" to "com","select" to com.actHand(flop.cardList))
+        com.actHand(flop.cardList)
+        return com.latestAct
     }
+
 
     /**
      *

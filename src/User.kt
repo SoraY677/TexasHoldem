@@ -12,20 +12,51 @@ class User : CardHolder(){
      * ユーザの行動
      */
     fun actHand(){
-        btpanel.ableAllButton()
             while(true){
                 if(isWaitInput == true)break
                 Thread.sleep(100)//入力を受け付けるためにsleep
             }
+        exchangeProperty()
         btpanel.disableAllButton()
 
         isWaitInput = false
     }
 
     /**
+     * 現在の状況から押せるボタンを制限する
+     * @return 使えなくするボタンリスト
+     */
+    fun limitActionButton(comhand:String = ""){
+
+
+        //一度、全てのボタンを使えるようにする
+        btpanel.ableAllButton()
+
+        var disableBtList:ArrayList<String> = arrayListOf()
+        //何も入力されていない状況
+        if(comhand == ""){
+            disableBtList = arrayListOf("Raise","Call")
+        }
+        else{
+            disableBtList =
+            when(comhand){
+                "Check" ->arrayListOf("Raise","Call","Bet")
+                "Bet"->arrayListOf("Check","Bet")
+                "Raise"->arrayListOf("Check","Bet","Raise")
+                "All-in"->arrayListOf("Raise","Call")//TODO:こいつは曲者だ！
+                else -> arrayListOf("")
+            }
+        }
+
+        disableBtList.forEach {
+            btpanel.disableButton(it)
+        }
+    }
+
+    /**
      * ユーザーの行動から関連数値の変動を行う
      */
-    fun exchangeProperty():String{
+    fun exchangeProperty(){
             var text = ""
             when (actionName) {
                 "Bet" -> {
@@ -41,8 +72,7 @@ class User : CardHolder(){
 
                 }
             }
-
-        return actionName
+        latestAct = mapOf("hand" to "user","select" to actionName)
     }
 
 

@@ -10,9 +10,10 @@ class Computer:CardHolder() {
         //TODO:どういった処理をするのか決める
         //例えばSwitchでどの行動を行うか決めるとか
 
+        latestAct =  mapOf("hand" to "com","select" to "Raise")
 
         println("com action done.")//TODO : DEL AFTER
-        return "Check"
+        return "Raise"
     }
 
     /**

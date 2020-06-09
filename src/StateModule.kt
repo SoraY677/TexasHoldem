@@ -11,7 +11,7 @@ class StateModule {
     var continueFlag = true
 
     var paintMap = mutableMapOf<String,Any>()
-    var flopCardNum = 4 //場のカード数
+    var flopVaryNum = 0 //場のカードに変化をおよぼすに至った回数
     var battleResult = 0 // 勝敗
     var playNum = 0 // プレイ回数
 
@@ -29,7 +29,7 @@ class StateModule {
      */
     fun state100(){
         pot = 0
-        flopCardNum = 4
+        flopVaryNum = 0
         paintMap.clear()
         progress.init()
         canvas.init()
@@ -87,9 +87,9 @@ class StateModule {
     /**
      * 先攻
      */
-    fun state120(dealer:Int):Map<String,String>{
+    fun state120(dealer:Int,prevAct:String):Map<String,String>{
         if(dealer == 0) {
-            return progress.actUserHand()
+            return progress.actUserHand(prevAct)
         }
         else{
             return progress.actComHand()
@@ -99,17 +99,17 @@ class StateModule {
     /**
      * 後攻
      */
-    fun state121(dealer:Int):Map<String,String>{
+    fun state121(dealer:Int,prevAct:String):Map<String,String>{
         if(dealer == 0) {
             return progress.actComHand()
         }
         else{
-            return progress.actUserHand()
+            return progress.actUserHand(prevAct)
         }
     }
 
     /**
-     * 両方の行動
+     * 両方の行動終了後
      */
     fun state122():Int{
         pot += progress.user.betMoney
@@ -121,16 +121,26 @@ class StateModule {
         canvas.changeDrawTargetText("potBetAmount",pot.toString())
         canvas.changeDrawTargetText("userAllChipAmount",progress.user.holdMoney.toString())
         canvas.changeDrawTargetText("comAllChipAmount",progress.com.holdMoney.toString())
-        return flopCardNum
+        return flopVaryNum
     }
 
     /**
      * 場に新カードの追加
      */
     fun state130(){
-        val id = progress.addNewFlopCard()
-        canvas.changeTrumpCard("flopCard" + flopCardNum.toString(),id)
-        flopCardNum ++
+        when(flopVaryNum){
+            0 -> {
+                for(cardi in 0 until 3)
+                canvas.changeTrumpCard("flopCard" + (cardi+1).toString(),progress.addNewFlopCard())
+            }
+            1 -> {
+                    canvas.changeTrumpCard("flopCard4",progress.addNewFlopCard())
+            }
+            2 -> {
+                    canvas.changeTrumpCard("flopCard5",progress.addNewFlopCard())
+            }
+        }
+        flopVaryNum++
     }
 
     /**
@@ -184,7 +194,6 @@ class StateModule {
         playNum++;
 
     }
-
 
 
     /**
