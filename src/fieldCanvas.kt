@@ -1,9 +1,11 @@
 import com.sun.deploy.panel.PathRenderer
 import org.omg.CORBA.Object
-import java.awt.Canvas
-import java.awt.Graphics
-import java.awt.Image
+import java.awt.*
 import javax.swing.ImageIcon
+import java.awt.Font.ITALIC
+import java.awt.Color.yellow
+
+
 
 
 
@@ -23,14 +25,13 @@ class FieldCanvas : Canvas(){
     init {
         /*画像読み込み部*/
         //UI画像
+        imageList["bg"] = ImageIcon(javaClass.getResource("image/fieldUI/background.png")).image
         imageList["plateYou"] = ImageIcon(javaClass.getResource("image/fieldUI/YOU.png")).image
         imageList["plateCom"] = ImageIcon(javaClass.getResource("image/fieldUI/COM.png")).image
         imageList["plateDealer"] = ImageIcon(javaClass.getResource("image/fieldUI/Dealer.png")).image
-        imageList["userChip"] = ImageIcon(javaClass.getResource("image/fieldUI/betChip.png")).image
+        imageList["userChip"] = ImageIcon(javaClass.getResource("image/fieldUI/pot.png")).image
         imageList["comChip"] = imageList["userChip"]!!
         imageList["potChip"] = imageList["userChip"]!!
-        imageList["userAllChip"] = ImageIcon(javaClass.getResource("image/fieldUI/allChip.png")).image
-        imageList["comAllChip"] = ImageIcon(javaClass.getResource("image/fieldUI/allChip.png")).image
 
         //トランプ画像
         for (cardId in TrumpBunch().issueCardIdList()){
@@ -56,37 +57,38 @@ class FieldCanvas : Canvas(){
 
         val cardSize = getCardSize()
         drawImgAllMap = mapOf(
-            "plateYou" to ImgMap(800,600),//Youを表すプレート
-            "plateCom" to ImgMap(400,20),//Comを表すプレート
-            "plateDealer" to ImgMap(200,600),//dealerを表すプレート
-            "flopCard1" to ImgMap(width/2- 5*cardSize["x"]!!/2+0*cardSize["x"]!!, height/2-cardSize["y"]!!/2),
-            "flopCard2" to ImgMap(width/2- 5*cardSize["x"]!!/2+1*cardSize["x"]!!, height/2-cardSize["y"]!!/2 ),
-            "flopCard3" to ImgMap(width/2- 5*cardSize["x"]!!/2+2*cardSize["x"]!!, height/2-cardSize["y"]!!/2),
-            "flopCard4" to ImgMap(width/2- 5*cardSize["x"]!!/2+3*cardSize["x"]!!, height/2-cardSize["y"]!!/2),
-            "flopCard5" to ImgMap(width/2- 5*cardSize["x"]!!/2+4*cardSize["x"]!!, height/2-cardSize["y"]!!/2 ),
-            "userCard1" to ImgMap(width/2- 2*cardSize["x"]!!/2+0*cardSize["x"]!!, height/2+cardSize["y"]!!/2),
-            "userCard2" to ImgMap(width/2- 2*cardSize["x"]!!/2+1*cardSize["x"]!!, height/2+cardSize["y"]!!/2),
-            "comCard1" to ImgMap(width/2- 2*cardSize["x"]!!/2+0*cardSize["x"]!!, height/2-cardSize["y"]!!*3/2),
-            "comCard2" to ImgMap(width/2- 2*cardSize["x"]!!/2+1*cardSize["x"]!!, height/2-cardSize["y"]!!*3/2),
-            "userChip" to ImgMap(800,520),
-            "comChip" to ImgMap(340,100),
-            "potChip" to ImgMap(1000,300),
-            "userAllChip" to ImgMap(1000,600),
-            "comAllChip" to ImgMap(200,20)
+            "bg" to ImgMap(0,0),
+            "plateYou" to ImgMap(width/2- 2*cardSize["x"]!!/2+1*(cardSize["x"]!!+ 5)+160, height/2+cardSize["y"]!!/2 +140),//Youを表すプレート
+            "plateCom" to ImgMap(width/2- 2*cardSize["x"]!!/2+0*(cardSize["x"]!!+ 5)-160, height/2-cardSize["y"]!!*3/2 - 140),//Comを表すプレート
+            "plateDealer" to ImgMap(0,0),//dealerを表すプレート
+            "flopCard1" to ImgMap(width/2- 5*cardSize["x"]!!/2+0*(cardSize["x"]!! + 5), height/2-cardSize["y"]!!/2 - 30),
+            "flopCard2" to ImgMap(width/2- 5*cardSize["x"]!!/2+1*(cardSize["x"]!!+ 5), height/2-cardSize["y"]!!/2  - 30),
+            "flopCard3" to ImgMap(width/2- 5*cardSize["x"]!!/2+2*(cardSize["x"]!!+ 5), height/2-cardSize["y"]!!/2 - 30),
+            "flopCard4" to ImgMap(width/2- 5*cardSize["x"]!!/2+3*(cardSize["x"]!!+ 5), height/2-cardSize["y"]!!/2 - 30),
+            "flopCard5" to ImgMap(width/2- 5*cardSize["x"]!!/2+4*(cardSize["x"]!!+ 5), height/2-cardSize["y"]!!/2 - 30),
+            "userCard1" to ImgMap(width/2- 2*cardSize["x"]!!/2+0*(cardSize["x"]!!+ 5), height/2+cardSize["y"]!!/2 - 10),
+            "userCard2" to ImgMap(width/2- 2*cardSize["x"]!!/2+1*(cardSize["x"]!!+ 5), height/2+cardSize["y"]!!/2 - 10),
+            "comCard1" to ImgMap(width/2- 2*cardSize["x"]!!/2+0*(cardSize["x"]!!+ 5), height/2-cardSize["y"]!!*3/2 - 50),
+            "comCard2" to ImgMap(width/2- 2*cardSize["x"]!!/2+1*(cardSize["x"]!!+ 5), height/2-cardSize["y"]!!*3/2 - 50),
+            "userChip" to ImgMap(width/2- 2*cardSize["x"]!!/2+1*(cardSize["x"]!!+ 5) + 180, height/2+cardSize["y"]!!/2 - 10),
+            "comChip" to ImgMap(width/2- 2*cardSize["x"]!!/2+0*(cardSize["x"]!!+ 5)-160, height/2-cardSize["y"]!!*3/2 - 50),
+            "potChip" to ImgMap(width/2- 5*cardSize["x"]!!/2+4*(cardSize["x"]!!+ 5) + 200, height/2-cardSize["y"]!!/2 )
         )
 
         drawStringAllMap = mapOf(
-            "userBetAmount" to mapOf("x" to 800, "y" to 520),
-            "comBetAmount" to mapOf("x" to 340, "y" to 100),
-            "potBetAmount" to mapOf("x" to 1200, "y" to 300),
-            "userAllChipAmount" to mapOf("x" to 1100, "y" to 620),
-            "comAllChipAmount" to mapOf("x" to 250, "y" to 40)
+            "userBetAmount" to mapOf("x" to width/2- 2*cardSize["x"]!!/2+1*(cardSize["x"]!!+ 5) + 225, "y" to height/2+cardSize["y"]!!/2 +35),
+            "comBetAmount" to mapOf("x" to width/2- 2*cardSize["x"]!!/2+0*(cardSize["x"]!!+ 5)-120, "y" to height/2-cardSize["y"]!!*3/2),
+            "potBetAmount" to mapOf("x" to width/2- 5*cardSize["x"]!!/2+4*(cardSize["x"]!!+ 5) + 240, "y" to height/2-cardSize["y"]!!/2 + 35 ),
+            "userAllChipAmount" to mapOf("x" to width/2- 2*cardSize["x"]!!/2+1*(cardSize["x"]!!+ 5)+180, "y" to height/2+cardSize["y"]!!/2 +200),
+            "comAllChipAmount" to mapOf("x" to width/2- 2*cardSize["x"]!!/2+0*(cardSize["x"]!!+ 5)-140, "y" to height/2-cardSize["y"]!!*3/2 - 80)
+
+        )
+        dealerPosition = arrayOf(
+            mapOf("x" to width/2- 2*cardSize["x"]!!/2+0*(cardSize["x"]!!+ 5) -300 ,"y" to height/2+cardSize["y"]!!/2 +50),
+            mapOf("x" to width/2- 2*cardSize["x"]!!/2+0*(cardSize["x"]!!+ 5) + 300 , "y" to height/2-cardSize["y"]!!*3/2 - 120)
         )
 
-        dealerPosition = arrayOf(
-            mapOf("x" to 200  ,"y" to 600 ),
-            mapOf("x" to 800 , "y" to 100)
-        )
+
     }
 
 
@@ -96,8 +98,11 @@ class FieldCanvas : Canvas(){
      */
     override fun paint(g: Graphics) {
 
+
         //配列で渡された画像を表示する
         drawTargetImgMap.forEach{
+            g.color = Color.white
+            g.font = Font("Serif", ITALIC, 32)    //フォント情報を追加
             g.drawImage(imageList[it.value["img"]],it.value["x"].toString().toInt() , it.value["y"].toString().toInt(), null)
         }
 
@@ -145,12 +150,6 @@ class FieldCanvas : Canvas(){
         val y = drawStringAllMap[targetKey]!!["y"].toString().toInt()
         drawTargetStrMap[targetKey] = mapOf("x" to x, "y" to y, "content" to text)
     }
-
-
-    /**
-     * 描画対象の画像を外す
-     */
-    //TODO?
 
     /**
      * 指定の画像を指定位置に描画する

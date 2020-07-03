@@ -58,7 +58,6 @@ class User : CardHolder(){
             var text = ""
             when (actionName) {
                 "Bet" -> {
-                    text = btpanel.bettext.getText()
                 }
                 "Raise" -> {
 

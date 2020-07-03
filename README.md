@@ -1,5 +1,3 @@
-# テキサスホールデム
-
 # 画面イメージ
 本当に雑なイメージ  
 ![画面イメージ図](https://user-images.githubusercontent.com/46548311/82116900-ec6b2980-97a7-11ea-8523-d2409a9d81eb.png)
@@ -27,3 +25,6 @@
 |   152    |          プレイ数+1          | 100 or 160  |
 |   160    |      対戦終了・結果表示      |
  
+# 参考・画像元
+
+[トランプカード](https://commons.wikimedia.org/wiki/Category:SVG_playing_cards)

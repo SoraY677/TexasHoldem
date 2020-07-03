@@ -1,43 +1,41 @@
-import java.awt.event.ActionEvent
-import java.awt.event.ActionListener
+import javafx.scene.layout.Border
+import javafx.scene.layout.BorderStroke
+import java.awt.Color
+import java.awt.Dimension
+import java.awt.Rectangle
 import java.util.regex.Pattern
 import javax.swing.JButton
+import javax.swing.JLabel
 import javax.swing.JPanel
-import javax.swing.JTextField
 
 class ButtonPanel {
 
     val BUTTON_NAME_LIST = arrayOf("Fold","Check","Bet","Raise","Call","All-in")
 
     var buttonList = mutableMapOf<String, JButton>()
-    val bettext = JTextField(20)
     var panel = JPanel()
+
 
 
     constructor(user:User) {
 
-
         BUTTON_NAME_LIST.forEach {
             val name = it
-            buttonList[name] = JButton(name)
-            buttonList[name]!!.addActionListener({
-
+            buttonList[it] = RoundButton(name, Color(189,46,27),100,100,20)
+            buttonList[it]!!.addActionListener({
                 if (name == "Fold" || name == "Check" || name == "Call") {
                     user.actionName = name
                     user.isWaitInput = true
-                } else {
-                    if (checkMoneyString(bettext.getText())) {
-                        user.actionName = name
-                        user.isWaitInput = true
-                    }
                 }
             })
+
         }
 
-        panel.add(bettext)
         buttonList.forEach {
             panel.add(it.value)
         }
+
+
     }
 
     /**
@@ -84,7 +82,6 @@ class ButtonPanel {
     fun checkMoneyString(target:String):Boolean{
         val pattern = Pattern.compile("[1-9].[0-9]*")
         val match = pattern.matcher(target)
-
 
         if(match.find())return true
         return false

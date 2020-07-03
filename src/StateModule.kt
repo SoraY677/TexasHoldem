@@ -1,3 +1,5 @@
+import javax.swing.JLabel
+
 class StateModule {
 
     val progress = ProgressController()
@@ -33,12 +35,11 @@ class StateModule {
         paintMap.clear()
         progress.init()
         canvas.init()
+        canvas.addDrawTargetImg("bg")
         canvas.addDrawTargetImg("plateYou")
         canvas.addDrawTargetImg("plateCom")
-        canvas.addDrawTargetImg("userAllChip")
-        canvas.addDrawTargetImg("comAllChip")
-        canvas.changeDrawTargetText("userAllChipAmount",progress.user.holdMoney.toString())
-        canvas.changeDrawTargetText("comAllChipAmount",progress.com.holdMoney.toString())
+        canvas.changeDrawTargetText("userAllChipAmount","＄"+progress.user.holdMoney.toString())
+        canvas.changeDrawTargetText("comAllChipAmount","＄"+progress.com.holdMoney.toString())
     }
 
     /**
@@ -76,11 +77,11 @@ class StateModule {
         else{
             progress.firstBet(10,5)
         }
-        canvas.changeDrawTargetText("userBetAmount",progress.user.betMoney.toString())
-        canvas.changeDrawTargetText("comBetAmount",progress.com.betMoney.toString())
-        canvas.changeDrawTargetText("potBetAmount",pot.toString())
-        canvas.changeDrawTargetText("userAllChipAmount",progress.user.holdMoney.toString())
-        canvas.changeDrawTargetText("comAllChipAmount",progress.com.holdMoney.toString())
+        canvas.changeDrawTargetText("userBetAmount","＄" + progress.user.betMoney.toString())
+        canvas.changeDrawTargetText("comBetAmount","＄" + progress.com.betMoney.toString())
+        canvas.changeDrawTargetText("potBetAmount","＄" + pot.toString())
+        canvas.changeDrawTargetText("userAllChipAmount","＄" + progress.user.holdMoney.toString())
+        canvas.changeDrawTargetText("comAllChipAmount","＄" +progress.com.holdMoney.toString())
 
     }
 
@@ -116,11 +117,11 @@ class StateModule {
         pot += progress.com.betMoney
         progress.user.betMoney = 0
         progress.com.betMoney = 0
-        canvas.changeDrawTargetText("userBetAmount",progress.user.betMoney.toString())
-        canvas.changeDrawTargetText("comBetAmount",progress.com.betMoney.toString())
-        canvas.changeDrawTargetText("potBetAmount",pot.toString())
-        canvas.changeDrawTargetText("userAllChipAmount",progress.user.holdMoney.toString())
-        canvas.changeDrawTargetText("comAllChipAmount",progress.com.holdMoney.toString())
+        canvas.changeDrawTargetText("userBetAmount","＄" +progress.user.betMoney.toString())
+        canvas.changeDrawTargetText("comBetAmount","＄" +progress.com.betMoney.toString())
+        canvas.changeDrawTargetText("potBetAmount","＄" +pot.toString())
+        canvas.changeDrawTargetText("userAllChipAmount","＄" +progress.user.holdMoney.toString())
+        canvas.changeDrawTargetText("comAllChipAmount","＄" +progress.com.holdMoney.toString())
         return flopVaryNum
     }
 

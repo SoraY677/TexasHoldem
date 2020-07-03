@@ -1,10 +1,10 @@
 import java.awt.*
 import javax.swing.*
 
-class GameFrame : JFrame("hogehoge"){
+class GameFrame : JFrame("TexasHoldem"){
 
-    public val panelWidth = 1280
-    public val panelHeight = 800
+    public val panelWidth = 1250
+    public val panelHeight = 1000
 
     init {
         setSize(panelWidth,panelHeight)
