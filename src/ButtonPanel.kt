@@ -23,9 +23,7 @@ class ButtonPanel {
             val name = it
             buttonList[it] = RoundButton("<html><div style='text-align:center;'>"+it+"</div></html>", Color(189,46,27),100,100,20)
             buttonList[it]!!.addActionListener({
-                if (name == "Fold" || name == "Check" || name == "Call") {
-                    user.isWaitInput = true
-                }
+                user.isWaitInput = true
                 user.actionName = name
             })
 

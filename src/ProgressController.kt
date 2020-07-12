@@ -1,3 +1,4 @@
+import java.awt.Canvas
 import kotlin.collections.ArrayList
 import kotlin.random.Random
 
@@ -48,8 +49,8 @@ class ProgressController {
     }
 
     /**
-     * user,com,flopそれぞれに
-     * カードの配布を行う
+     * user,com,それぞれに
+     * 初期のカードの配布を行う
      */
     fun divideCards():MutableMap<String,ArrayList<String>>{
         //user,com = 2 | flop = 3 でカードを配る
@@ -57,8 +58,6 @@ class ProgressController {
         user.recieveCards(userCard)
         val comCard = arrayListOf(trumpBunch.drawCardfromTop(),trumpBunch.drawCardfromTop())
         com.recieveCards(comCard)
-        val flopCard = arrayListOf(trumpBunch.drawCardfromTop(),trumpBunch.drawCardfromTop(),trumpBunch.drawCardfromTop())
-        flop.recieveCards(flopCard)
 
         //カード情報を返す
         var result = mutableMapOf("user" to arrayListOf<String>(), "com" to arrayListOf<String>(),"flop" to arrayListOf<String>())
@@ -95,9 +94,7 @@ class ProgressController {
      * ユーザの行動
      */
     fun actUserHand(act:String):Map<String,String>{
-        user.limitActionButton(act)
-        user.actHand()
-        return user.latestAct
+        return user.actHand(act,com.betMoney)
     }
 
 
@@ -105,8 +102,7 @@ class ProgressController {
      * コンピュータの行動
      */
     fun actComHand():Map<String,String>{
-        com.actHand(flop.cardList)
-        return com.latestAct
+        return com.actHand(flop.cardList,user.betMoney,user.latestAct)
     }
 
 

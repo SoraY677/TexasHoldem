@@ -91,7 +91,10 @@ class StateModule {
      */
     fun state120(dealer:Int,prevAct:String):Map<String,String>{
         if(dealer == 0) {
-            return progress.actUserHand(prevAct)
+            val userAction = progress.actUserHand(prevAct)
+            canvas.changeDrawTargetText("userBetAmount",userAction["bet"]!!)
+            canvas.changeDrawTargetText("userAllChipAmount",userAction["holdMoney"]!!)
+            return userAction
         }
         else{
             return progress.actComHand()
@@ -106,7 +109,10 @@ class StateModule {
             return progress.actComHand()
         }
         else{
-            return progress.actUserHand(prevAct)
+            val userAction = progress.actUserHand(prevAct)
+            canvas.changeDrawTargetText("userBetAmount",userAction["bet"]!!)
+            canvas.changeDrawTargetText("userAllChipAmount",userAction["holdMoney"]!!)
+            return userAction
         }
     }
 
