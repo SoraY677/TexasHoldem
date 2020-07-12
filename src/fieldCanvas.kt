@@ -20,6 +20,7 @@ class FieldCanvas : Canvas(){
     var drawTargetImgMap:MutableMap<String,Map<String,Any>> = mutableMapOf()
     var drawTargetStrMap:MutableMap<String,Map<String,Any>> = mutableMapOf()
 
+    private var buffer:Image? = null
 
 
     init {
@@ -29,9 +30,9 @@ class FieldCanvas : Canvas(){
         imageList["plateYou"] = ImageIcon(javaClass.getResource("image/fieldUI/YOU.png")).image
         imageList["plateCom"] = ImageIcon(javaClass.getResource("image/fieldUI/COM.png")).image
         imageList["plateDealer"] = ImageIcon(javaClass.getResource("image/fieldUI/Dealer.png")).image
-        imageList["userChip"] = ImageIcon(javaClass.getResource("image/fieldUI/pot.png")).image
+        imageList["userChip"] = ImageIcon(javaClass.getResource("image/fieldUI/bet.png")).image
         imageList["comChip"] = imageList["userChip"]!!
-        imageList["potChip"] = imageList["userChip"]!!
+        imageList["potChip"] = ImageIcon(javaClass.getResource("image/fieldUI/pot.png")).image!!
 
         //トランプ画像
         for (cardId in TrumpBunch().issueCardIdList()){
@@ -40,7 +41,6 @@ class FieldCanvas : Canvas(){
 
         //トランプ背景画像
         imageList["c999"] = ImageIcon(javaClass.getResource("image/card/c999.png")).image
-
     }
 
     /**
@@ -56,39 +56,41 @@ class FieldCanvas : Canvas(){
         }
 
         val cardSize = getCardSize()
+        /*共通の座標を定義*/
+        val playerCardY = height/2+cardSize["y"]!!/2 + 30
+        val fieldCardY = height/2-cardSize["y"]!!/2 - 30
+        val comCardY = height/2 - cardSize["y"]!!*3/2 - 180
         drawImgAllMap = mapOf(
             "bg" to ImgMap(0,0),
-            "plateYou" to ImgMap(width/2- 2*cardSize["x"]!!/2+1*(cardSize["x"]!!+ 5)+160, height/2+cardSize["y"]!!/2 +140),//Youを表すプレート
-            "plateCom" to ImgMap(width/2- 2*cardSize["x"]!!/2+0*(cardSize["x"]!!+ 5)-160, height/2-cardSize["y"]!!*3/2 - 140),//Comを表すプレート
+            "plateYou" to ImgMap(width/2- 2*cardSize["x"]!!/2+1*(cardSize["x"]!!+ 5)+160, height/2+cardSize["y"]!!/2 +130),//Youを表すプレート
+            "plateCom" to ImgMap(width/2- 2*cardSize["x"]!!/2+0*(cardSize["x"]!!+ 5)-180, height/2-cardSize["y"]!!*3/2 - 180),//Comを表すプレート
             "plateDealer" to ImgMap(0,0),//dealerを表すプレート
-            "flopCard1" to ImgMap(width/2- 5*cardSize["x"]!!/2+0*(cardSize["x"]!! + 5), height/2-cardSize["y"]!!/2 - 30),
-            "flopCard2" to ImgMap(width/2- 5*cardSize["x"]!!/2+1*(cardSize["x"]!!+ 5), height/2-cardSize["y"]!!/2  - 30),
-            "flopCard3" to ImgMap(width/2- 5*cardSize["x"]!!/2+2*(cardSize["x"]!!+ 5), height/2-cardSize["y"]!!/2 - 30),
-            "flopCard4" to ImgMap(width/2- 5*cardSize["x"]!!/2+3*(cardSize["x"]!!+ 5), height/2-cardSize["y"]!!/2 - 30),
-            "flopCard5" to ImgMap(width/2- 5*cardSize["x"]!!/2+4*(cardSize["x"]!!+ 5), height/2-cardSize["y"]!!/2 - 30),
-            "userCard1" to ImgMap(width/2- 2*cardSize["x"]!!/2+0*(cardSize["x"]!!+ 5), height/2+cardSize["y"]!!/2 - 10),
-            "userCard2" to ImgMap(width/2- 2*cardSize["x"]!!/2+1*(cardSize["x"]!!+ 5), height/2+cardSize["y"]!!/2 - 10),
-            "comCard1" to ImgMap(width/2- 2*cardSize["x"]!!/2+0*(cardSize["x"]!!+ 5), height/2-cardSize["y"]!!*3/2 - 50),
-            "comCard2" to ImgMap(width/2- 2*cardSize["x"]!!/2+1*(cardSize["x"]!!+ 5), height/2-cardSize["y"]!!*3/2 - 50),
-            "userChip" to ImgMap(width/2- 2*cardSize["x"]!!/2+1*(cardSize["x"]!!+ 5) + 180, height/2+cardSize["y"]!!/2 - 10),
-            "comChip" to ImgMap(width/2- 2*cardSize["x"]!!/2+0*(cardSize["x"]!!+ 5)-160, height/2-cardSize["y"]!!*3/2 - 50),
-            "potChip" to ImgMap(width/2- 5*cardSize["x"]!!/2+4*(cardSize["x"]!!+ 5) + 200, height/2-cardSize["y"]!!/2 )
+            "flopCard1" to ImgMap(width/2- 5*cardSize["x"]!!/2+0*(cardSize["x"]!! + 5), fieldCardY),
+            "flopCard2" to ImgMap(width/2- 5*cardSize["x"]!!/2+1*(cardSize["x"]!!+ 5), fieldCardY),
+            "flopCard3" to ImgMap(width/2- 5*cardSize["x"]!!/2+2*(cardSize["x"]!!+ 5), fieldCardY),
+            "flopCard4" to ImgMap(width/2- 5*cardSize["x"]!!/2+3*(cardSize["x"]!!+ 5), fieldCardY),
+            "flopCard5" to ImgMap(width/2- 5*cardSize["x"]!!/2+4*(cardSize["x"]!!+ 5), fieldCardY),
+            "userCard1" to ImgMap(width/2- 2*cardSize["x"]!!/2+0*(cardSize["x"]!!+ 5), playerCardY),
+            "userCard2" to ImgMap(width/2- 2*cardSize["x"]!!/2+1*(cardSize["x"]!!+ 5), playerCardY),
+            "comCard1" to ImgMap(width/2- 2*cardSize["x"]!!/2+0*(cardSize["x"]!!+ 5), comCardY),
+            "comCard2" to ImgMap(width/2- 2*cardSize["x"]!!/2+1*(cardSize["x"]!!+ 5), comCardY),
+            "userChip" to ImgMap(width/2- 2*cardSize["x"]!!/2+1*(cardSize["x"]!!+ 5) + 180, height/2+cardSize["y"]!!/2 +40),
+            "comChip" to ImgMap(width/2- 2*cardSize["x"]!!/2+0*(cardSize["x"]!!+ 5)-180, height/2-cardSize["y"]!!*3/2 - 60),
+            "potChip" to ImgMap(width-200,10)
         )
 
         drawStringAllMap = mapOf(
-            "userBetAmount" to mapOf("x" to width/2- 2*cardSize["x"]!!/2+1*(cardSize["x"]!!+ 5) + 225, "y" to height/2+cardSize["y"]!!/2 +35),
-            "comBetAmount" to mapOf("x" to width/2- 2*cardSize["x"]!!/2+0*(cardSize["x"]!!+ 5)-120, "y" to height/2-cardSize["y"]!!*3/2),
-            "potBetAmount" to mapOf("x" to width/2- 5*cardSize["x"]!!/2+4*(cardSize["x"]!!+ 5) + 240, "y" to height/2-cardSize["y"]!!/2 + 35 ),
-            "userAllChipAmount" to mapOf("x" to width/2- 2*cardSize["x"]!!/2+1*(cardSize["x"]!!+ 5)+180, "y" to height/2+cardSize["y"]!!/2 +200),
-            "comAllChipAmount" to mapOf("x" to width/2- 2*cardSize["x"]!!/2+0*(cardSize["x"]!!+ 5)-140, "y" to height/2-cardSize["y"]!!*3/2 - 80)
-
+            "userBetAmount" to mapOf("x" to width/2- 2*cardSize["x"]!!/2+1*(cardSize["x"]!!+ 5) + 250, "y" to height/2+cardSize["y"]!!/2 +75),
+            "comBetAmount" to mapOf("x" to width/2- 2*cardSize["x"]!!/2+0*(cardSize["x"]!!+ 5)-110, "y" to height/2-cardSize["y"]!!*3/2 -25),
+            "potBetAmount" to mapOf("x" to width-130, "y" to 110 ),
+            "userAllChipAmount" to mapOf("x" to width/2- 2*cardSize["x"]!!/2+1*(cardSize["x"]!!+ 5)+200, "y" to height/2+cardSize["y"]!!/2 +210),
+            "comAllChipAmount" to mapOf("x" to width/2- 2*cardSize["x"]!!/2+0*(cardSize["x"]!!+ 5)-130, "y" to height/2-cardSize["y"]!!*3/2 - 100)
         )
+
         dealerPosition = arrayOf(
-            mapOf("x" to width/2- 2*cardSize["x"]!!/2+0*(cardSize["x"]!!+ 5) -300 ,"y" to height/2+cardSize["y"]!!/2 +50),
-            mapOf("x" to width/2- 2*cardSize["x"]!!/2+0*(cardSize["x"]!!+ 5) + 300 , "y" to height/2-cardSize["y"]!!*3/2 - 120)
+            mapOf("x" to width/2- 2*cardSize["x"]!!/2+0*(cardSize["x"]!!+ 5) -150 ,"y" to height/2+cardSize["y"]!!/2 +50),
+            mapOf("x" to width/2- 2*cardSize["x"]!!/2+0*(cardSize["x"]!!+ 5) + 320 , "y" to height/2-cardSize["y"]!!*3/2 - 120)
         )
-
-
     }
 
 
@@ -97,23 +99,31 @@ class FieldCanvas : Canvas(){
      * repaint()で呼び出される
      */
     override fun paint(g: Graphics) {
+        val gv = buffer!!.graphics
 
+        gv.clearRect(0, 0, 520, 400);       //バッファ領域クリア
 
         //配列で渡された画像を表示する
         drawTargetImgMap.forEach{
-            g.color = Color.white
-            g.font = Font("Serif", ITALIC, 32)    //フォント情報を追加
-            g.drawImage(imageList[it.value["img"]],it.value["x"].toString().toInt() , it.value["y"].toString().toInt(), null)
+            gv.drawImage(imageList[it.value["img"]],it.value["x"].toString().toInt() , it.value["y"].toString().toInt(), null)
         }
 
         drawTargetStrMap.forEach{
-            g.drawString(it.value["content"].toString(),it.value["x"].toString().toInt(),it.value["y"].toString().toInt())
+            gv.color = Color.white
+            gv.font = Font("SansSerif", ITALIC, 32)    //フォント情報を追加
+            gv.drawString(it.value["content"].toString(),it.value["x"].toString().toInt(),it.value["y"].toString().toInt())
         }
+
+        //バッファ領域に書き込んでおいたイメージを描画
+        g.drawImage(buffer, 0, 0, width, height, this)
     }
 
     fun init(){
         drawTargetImgMap = mutableMapOf()
         drawTargetStrMap = mutableMapOf()
+        //バッファを生成
+        buffer = createImage(width, height);
+
     }
 
     /**

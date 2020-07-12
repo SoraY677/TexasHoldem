@@ -90,7 +90,6 @@ class StateController {
                 exitProcess(-1)
             }
         }
-        println(state)
         stateMgr.processMediate()
 
 

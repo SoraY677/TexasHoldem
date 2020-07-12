@@ -21,21 +21,37 @@ class ButtonPanel {
 
         BUTTON_NAME_LIST.forEach {
             val name = it
-            buttonList[it] = RoundButton(name, Color(189,46,27),100,100,20)
+            buttonList[it] = RoundButton("<html><div style='text-align:center;'>"+it+"</div></html>", Color(189,46,27),100,100,20)
             buttonList[it]!!.addActionListener({
                 if (name == "Fold" || name == "Check" || name == "Call") {
-                    user.actionName = name
                     user.isWaitInput = true
                 }
+                user.actionName = name
             })
 
         }
+
+        changeButtonLabel("Bet",5)
 
         buttonList.forEach {
             panel.add(it.value)
         }
 
+        panel.background = Color(1,106,53)
 
+
+    }
+
+    /**
+     * buttonに書いてあるラベルを変更する
+     */
+    fun changeButtonLabel(btnName:String,money:Int) {
+        if(money != 0){
+            buttonList[btnName]!!.text= "<html><div style='text-align:center;'>"+btnName + "<br />" +money.toString()+"</div></html>"
+        }
+        else{
+            buttonList[btnName]!!.text = "<html><div style='text-align:center;'>"+btnName +"</div></html>"
+        }
     }
 
     /**
@@ -67,24 +83,11 @@ class ButtonPanel {
         }
     }
 
-
-
     /**
      * ユーザーの入力待ち状態を解除する
      */
     fun exitProcessWait(user:User){
         user.isWaitInput = true
-    }
-
-    /**
-     * 入力されたmoneyが違反していないか調べる
-     */
-    fun checkMoneyString(target:String):Boolean{
-        val pattern = Pattern.compile("[1-9].[0-9]*")
-        val match = pattern.matcher(target)
-
-        if(match.find())return true
-        return false
     }
 
 }

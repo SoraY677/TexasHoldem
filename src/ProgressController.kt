@@ -68,9 +68,6 @@ class ProgressController {
         comCard.forEach {
             result["com"]!!.add("c999")
         }
-        flopCard.forEach {
-            result["flop"]!!.add("c999")
-        }
 
         return result
     }

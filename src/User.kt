@@ -32,12 +32,12 @@ class User : CardHolder(){
         //一度、全てのボタンを使えるようにする
         btpanel.ableAllButton()
 
+        //コンピュータの各アクションに対して入力できないボタンを定義
         var disableBtList:ArrayList<String> = arrayListOf()
-        //何も入力されていない状況
             disableBtList =
             when(act){
                 "initBet" -> arrayListOf("Check","Bet")
-                "firstAct" -> arrayListOf("Raise","Call")
+                "firstAct" -> arrayListOf("Raise","Call")//何も行われていない最初の状態
                 "Check" ->arrayListOf("Raise","Call","Bet")
                 "Bet"->arrayListOf("Check","Bet")
                 "Raise"->arrayListOf("Check","Bet")
@@ -55,9 +55,9 @@ class User : CardHolder(){
      * ユーザーの行動から関連数値の変動を行う
      */
     fun exchangeProperty(){
-            var text = ""
             when (actionName) {
                 "Bet" -> {
+
                 }
                 "Raise" -> {
 
@@ -71,9 +71,4 @@ class User : CardHolder(){
             }
         latestAct = mapOf("hand" to "user","select" to actionName)
     }
-
-
-
-
-
 }
