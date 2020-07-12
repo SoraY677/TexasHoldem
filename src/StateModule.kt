@@ -97,7 +97,10 @@ class StateModule {
             return userAction
         }
         else{
-            return progress.actComHand()
+            val comAction =  progress.actComHand(prevAct)
+            canvas.changeDrawTargetText("comBetAmount",comAction["bet"]!!)
+            canvas.changeDrawTargetText("comAllChipAmount",comAction["holdMoney"]!!)
+            return comAction
         }
     }
 
@@ -106,7 +109,10 @@ class StateModule {
      */
     fun state121(dealer:Int,prevAct:String):Map<String,String>{
         if(dealer == 0) {
-            return progress.actComHand()
+            val comAction =  progress.actComHand(prevAct)
+            canvas.changeDrawTargetText("comBetAmount",comAction["bet"]!!)
+            canvas.changeDrawTargetText("comAllChipAmount",comAction["holdMoney"]!!)
+            return comAction
         }
         else{
             val userAction = progress.actUserHand(prevAct)

@@ -93,16 +93,16 @@ class ProgressController {
     /**
      * ユーザの行動
      */
-    fun actUserHand(act:String):Map<String,String>{
-        return user.actHand(act,com.betMoney)
+    fun actUserHand(actState:String):Map<String,String>{
+        return user.actHand(com.latestAct,com.betMoney,actState)
     }
 
 
     /**
      * コンピュータの行動
      */
-    fun actComHand():Map<String,String>{
-        return com.actHand(flop.cardList,user.betMoney,user.latestAct)
+    fun actComHand(actState:String):Map<String,String>{
+        return com.actHand(flop.cardList,user.betMoney,user.latestAct,actState)
     }
 
 

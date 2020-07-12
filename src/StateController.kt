@@ -33,6 +33,7 @@ class StateController {
             //先行の行動
             120 ->{
                 act = stateMgr.state120(dealer,act["select"]!!)
+                println(act["select"])
                 if(act["select"] == "Fold" || act["select"] == "Call") state = 122
                 //それ以外であれば後攻の行動に移る
                 else state=121
@@ -40,6 +41,7 @@ class StateController {
             //後攻の行動
             121 ->{
                 act = stateMgr.state121(dealer,act["select"]!!)
+                println(act["select"])
                 //Foldかcallで次のカード
                 if(act["select"] == "Fold" || act["select"] == "Check" )
                     state = 122

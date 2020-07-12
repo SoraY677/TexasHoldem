@@ -14,7 +14,7 @@ class User : CardHolder(){
     /**
      * ユーザの行動
      */
-    fun actHand(act:String,comBetMoney:Int):Map<String,String>{
+    fun actHand(act:String,comBetMoney:Int,actState:String):Map<String,String>{
         var betList = mutableMapOf<String,Int>()
         betList["Fold"] = 0
         betList["Check"] = 0
@@ -31,7 +31,7 @@ class User : CardHolder(){
             betList["All-in"] = 0
         }
 
-        limitActionButton(act)//行動制限
+        limitActionButton(act,actState)//行動制限
         changeBetNum(betList)
         while(true){
                 if(isWaitInput == true)break
@@ -56,7 +56,7 @@ class User : CardHolder(){
      * 現在の状況から押せるボタンを制限する
      * @return 使えなくするボタンリスト
      */
-    fun limitActionButton(act:String){
+    fun limitActionButton(act:String,actState: String){
 
 
         //一度、全てのボタンを使えるようにする
@@ -65,14 +65,17 @@ class User : CardHolder(){
 
             disableBtList =
             when(act){
-                "initBet" -> arrayListOf("Check","Bet")
-                "firstAct" -> arrayListOf("Raise","Call")//何も行われていない最初の状態
-                "Check" ->arrayListOf("Raise","Call","Bet")
+                "Check" ->arrayListOf("Raise","Call")
+                "Call" -> arrayListOf("Raise","Call")
                 "Bet"->arrayListOf("Check","Bet")
                 "Raise"->arrayListOf("Check","Bet")
                 "All-in"->arrayListOf("Raise","Call")//TODO:こいつは曲者だ！
-                else -> arrayListOf("")
+                else -> arrayListOf()
             }
+
+        if(actState == "initBet")disableBtList = arrayListOf("Check","Bet")
+        else if(actState == "firstAct")disableBtList = arrayListOf("Raise","Call")
+
 
 
         disableBtList.forEach {
