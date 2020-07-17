@@ -93,6 +93,10 @@ class FieldCanvas : Canvas(){
         )
     }
 
+    override fun update(g: Graphics) {
+        paint(g)
+    }
+
 
     /**
      * 描画処理
@@ -123,7 +127,6 @@ class FieldCanvas : Canvas(){
         drawTargetStrMap = mutableMapOf()
         //バッファを生成
         buffer = createImage(width, height);
-
     }
 
     /**
