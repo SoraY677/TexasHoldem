@@ -133,28 +133,21 @@ class ProgressController {
         }
     }
 
-
-
-
     /**
-     *
+     * どちらかがすでにゲーム続行不可能の場合は終了する合図
      */
-    fun setDeckPos(){
+    fun isContinueGame(dealer:Int):Boolean{
 
+        //  次のターンでコンピュータがディーラーになる場合
+        if(dealer == 0){
+            if(com.holdMoney <5 || user.holdMoney < 10)
+                return true
+        }
+        //  次のターンでユーザがディーラーになる場合
+        else{
+            if(user.holdMoney <5 || com.holdMoney < 10)
+                return true
+        }
+        return false
     }
-
-    fun shuffleDeck(){
-
-    }
-
-
-
-
-    fun setUserCard(){
-
-    }
-
-
-
-
 }

@@ -20,7 +20,7 @@ class StateModule {
     /**
      * システム初期化
      */
-    fun state0(){
+    fun init(){
         //各パーツをセット
         frame.setVisible(canvas,progress.user.btpanel.panel)
         canvas.settingMapInfo(frame.panelWidth,frame.panelHeight)
@@ -30,7 +30,7 @@ class StateModule {
     /**
      * ゲーム初期化
      */
-    fun state100(){
+    fun initGame(){
         pot = 0
         flopVaryNum = 0
         paintMap.clear()
@@ -46,7 +46,7 @@ class StateModule {
     /**
      * ディーラーの交代
      */
-    fun state101():Int{
+    fun changeDealer():Int{
         dealer = progress.decideDealer()
         canvas.changeDealer(dealer)
         return dealer
@@ -55,7 +55,7 @@ class StateModule {
     /**
      * カードの配布
      */
-    fun state102(){
+    fun distributeCards(){
         val cardState = progress.divideCards()
         cardState.forEach{
             for(cardi in 0 until it.value.size){
@@ -68,7 +68,7 @@ class StateModule {
     /**
      * 初期ベット
      */
-    fun state103(){
+    fun initBet(){
         canvas.addDrawTargetImg("userChip")
         canvas.addDrawTargetImg("comChip")
         canvas.addDrawTargetImg("potChip")
@@ -89,7 +89,7 @@ class StateModule {
     /**
      * 先攻
      */
-    fun state120(dealer:Int,prevAct:String):Map<String,String>{
+    fun changefirstTurn(dealer:Int,prevAct:String):Map<String,String>{
         if(dealer == 0) {
             val userAction = progress.actUserHand(prevAct)
             canvas.changeDrawTargetText("userBetAmount",userAction["bet"]!!)
@@ -107,7 +107,7 @@ class StateModule {
     /**
      * 後攻
      */
-    fun state121(dealer:Int,prevAct:String):Map<String,String>{
+    fun changeSecondTurn(dealer:Int,prevAct:String):Map<String,String>{
         if(dealer == 0) {
             val comAction =  progress.actComHand(prevAct)
             canvas.changeDrawTargetText("comBetAmount",comAction["bet"]!!)
@@ -125,7 +125,7 @@ class StateModule {
     /**
      * 両方の行動終了後
      */
-    fun state122():Int{
+    fun tidyStatus():Int{
         pot += progress.user.betMoney
         pot += progress.com.betMoney
         progress.user.betMoney = 0
@@ -141,7 +141,7 @@ class StateModule {
     /**
      * 場に新カードの追加
      */
-    fun state130(){
+    fun addNewFlop(){
         when(flopVaryNum){
             0 -> {
                 for(cardi in 0 until 3)
@@ -157,10 +157,27 @@ class StateModule {
         flopVaryNum++
     }
 
+    fun addAllFlop(){
+        when(flopVaryNum){
+            0 -> {
+                for(cardi in 0 until 5)
+                    canvas.changeTrumpCard("flopCard" + (cardi+1).toString(),progress.addNewFlopCard())
+            }
+            1 -> {
+                canvas.changeTrumpCard("flopCard4",progress.addNewFlopCard())
+                canvas.changeTrumpCard("flopCard4",progress.addNewFlopCard())
+            }
+            2 -> {
+                canvas.changeTrumpCard("flopCard5",progress.addNewFlopCard())
+            }
+        }
+    }
+
+
     /**
      * カードオープン
      */
-    fun state140(){
+    fun openComCard(){
         val comHand = progress.openHand()
         for(cardi in 0 until comHand.size){
             canvas.changeTrumpCard("comCard" + (cardi + 1).toString(),comHand[cardi].publishId())
@@ -170,21 +187,21 @@ class StateModule {
     /**
      * ユーザーとコンピュータの役判定
      */
-    fun state141(){
+    fun judgeCardPower(){
         battleResult = progress.judgeHandPower()
     }
 
     /**
      * 結果表示
      */
-    fun state150(){
+    fun showResult(){
 
     }
 
     /**
      * チップ移動・プレイ数＋１
      */
-    fun state151(){
+    fun isMigrateNextGame():Boolean{
 
         if(battleResult == 0){
             println("user win")
@@ -204,8 +221,17 @@ class StateModule {
         }
         pot = 0
 
+        canvas.changeDrawTargetText("userBetAmount", progress.user.betMoney.toString())
+        canvas.changeDrawTargetText("comBetAmount", progress.com.betMoney.toString())
+        canvas.changeDrawTargetText("potBetAmount",pot.toString())
+        canvas.changeDrawTargetText("userAllChipAmount",progress.user.holdMoney.toString())
+        canvas.changeDrawTargetText("comAllChipAmount",progress.com.holdMoney.toString())
+
         //プレイ回数 +1
         playNum++;
+
+        if(progress.isContinueGame((dealer)))return false
+        return true
 
     }
 

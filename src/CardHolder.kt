@@ -1,7 +1,7 @@
 open class CardHolder {
     val BasePosition:MutableMap<String,Int> = mutableMapOf("x" to 0 , "y" to 0)
     var betMoney = 0
-    var holdMoney = 500
+    var holdMoney = 20
     var latestAct = ""
     var cardList:ArrayList<TrumpCard> = arrayListOf()
 

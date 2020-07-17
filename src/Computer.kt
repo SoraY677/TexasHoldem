@@ -5,7 +5,15 @@ class Computer:CardHolder() {
      */
     fun actHand(flopCardList: ArrayList<TrumpCard>,userBet:Int,userAct:String,actState:String):Map<String,String>{
 
-        var actStr = ioJudgeMaterial(flopCardList,userAct,actState)
+        var betList = mutableMapOf<String,Int>()
+        betList["Fold"] = 0
+        betList["Check"] = 0
+        betList["Bet"] = 5
+        betList["Call"] = userBet-betMoney
+        betList["Raise"] = userBet* 2
+        betList["All-in"] = holdMoney
+
+        var actStr = ioJudgeMaterial(flopCardList,userAct,actState,userBet,betList)
 
         changeBetNum(userBet,actStr)
 
@@ -22,7 +30,7 @@ class Computer:CardHolder() {
     /**
      * 標準入出力を行う
      */
-    fun ioJudgeMaterial(flopCardList:ArrayList<TrumpCard>,userAct: String,actState: String):String{
+    fun ioJudgeMaterial(flopCardList:ArrayList<TrumpCard>,userAct: String,actState: String,userBet:Int,betList:MutableMap<String, Int>):String{
         //外部出力： {自身の手・場のカード}
         var outputObj = mutableMapOf<String,ArrayList<TrumpCard>>()
         //コンピュータのカード情報
@@ -36,9 +44,8 @@ class Computer:CardHolder() {
 
         //できる行動を表示
         println("ableAction:")
-        println(judgeAbleAction(userAct,actState))
+        println(judgeAbleAction(userAct,actState,userBet,betList))
 
-        //TODO: 何を受け取るかを決めて受け取った値を整形する
         //標準入力
         println("comAction:")
         val inputStr = readLine().toString()
@@ -49,7 +56,7 @@ class Computer:CardHolder() {
     /**
      * できる行動を指定する
      */
-    fun judgeAbleAction(userAct:String,actState:String):ArrayList<String>{
+    fun judgeAbleAction(userAct:String,actState:String,userBet:Int,betList: MutableMap<String, Int>):ArrayList<String>{
         var actList = when(userAct){
             "Call" -> arrayListOf("Fold","Check","Bet","All-in")
             "Check" ->arrayListOf("Fold","Check","Bet","All-in")
@@ -60,6 +67,18 @@ class Computer:CardHolder() {
 
         if(actState == "initBet")actList = arrayListOf("Fold","Raise","Call","All-in")
         else if(actState == "firstAct")actList = arrayListOf("Fold","Check","Bet","All-in")
+
+
+        //all-inの場合は特殊
+        if(userAct == "All-in")
+            if(holdMoney >= userBet - betMoney) actList = arrayListOf("Fold","Call")
+            else actList = arrayListOf("Fold","All-in")
+
+        //手持ちの金額を超えてしまう場合のベットを禁じる
+        betList.forEach{
+            if(it.value > holdMoney)
+                actList.remove(it.key)
+        }
 
         return actList
     }

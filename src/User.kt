@@ -18,20 +18,19 @@ class User : CardHolder(){
         var betList = mutableMapOf<String,Int>()
         betList["Fold"] = 0
         betList["Check"] = 0
-        if(comBetMoney != 0){
-            betList["Bet"] = 0
-            betList["Call"] = comBetMoney-betMoney
-            betList["Raise"] = comBetMoney* 2
-            betList["All-in"] = holdMoney
-        }
-        else{
-            betList["Bet"] = 5
-            betList["Call"] = 0
-            betList["Raise"] = 0
-            betList["All-in"] = 0
-        }
+        betList["Bet"] = 5
+        betList["Call"] = comBetMoney-betMoney
+        betList["Raise"] = comBetMoney* 2
+        betList["All-in"] = holdMoney
+//        }
+//        else{
+//            betList["Bet"] = 5
+//            betList["Call"] = 0
+//            betList["Raise"] = 0
+//            betList["All-in"] = 0
+//        }
 
-        limitActionButton(act,actState)//行動制限
+        limitActionButton(act,actState,betList,comBetMoney)//行動制限
         changeBetNum(betList)
         while(true){
                 if(isWaitInput == true)break
@@ -56,12 +55,11 @@ class User : CardHolder(){
      * 現在の状況から押せるボタンを制限する
      * @return 使えなくするボタンリスト
      */
-    fun limitActionButton(act:String,actState: String){
+    fun limitActionButton(act:String,actState: String,betList: MutableMap<String, Int>,comBetMoney: Int){
 
 
         //一度、全てのボタンを使えるようにする
         btpanel.ableAllButton()
-
 
             disableBtList =
             when(act){
@@ -76,6 +74,15 @@ class User : CardHolder(){
         if(actState == "initBet")disableBtList = arrayListOf("Check","Bet")
         else if(actState == "firstAct")disableBtList = arrayListOf("Raise","Call")
 
+        if(act == "All-in"){
+            if(holdMoney >= comBetMoney - betMoney)disableBtList =arrayListOf("Check","Bet","Raise","All-in")
+            else disableBtList =arrayListOf("Check","Bet","Raise","Call")
+        }
+        //手持ちの金額を超えてしまう場合のベットを禁じる
+        betList.forEach{
+            if(it.value > holdMoney)
+                disableBtList.add(it.key)
+        }
 
 
         disableBtList.forEach {
