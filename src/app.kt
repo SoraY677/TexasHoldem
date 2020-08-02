@@ -1,4 +1,4 @@
-fun main(){
+fun main(args: Array<String>){
 //    val test = Test()
     val stateController = StateController()
     while(true){
